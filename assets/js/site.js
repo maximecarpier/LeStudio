@@ -56,7 +56,7 @@
 
   /* ---- Apparitions au défilement ---- */
   const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -10% 0px' });
-  $$('[data-reveal]').forEach(el => io.observe(el));
+  $$('[data-reveal], [data-ignite]').forEach(el => io.observe(el));
 
   /* ---- Lien actif dans la navigation ---- */
   const links = $$('.ls-nav__links a');

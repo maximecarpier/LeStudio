@@ -93,7 +93,11 @@
   --border-strong: 1.5px;
 
   /* ---- Lumière (remplace les ombres sur fond noir) ---------------------- */
-  --glow-neon: 0 0 0 1.5px rgb(255 255 255 / .9), 0 0 18px 2px rgb(255 255 255 / .45), 0 0 60px 8px rgb(255 255 255 / .12);
+  /* Anneau LED : le blanc neutre-froid des anneaux du salon, lueur dedans et dehors */
+  --led: #f3f7ff;
+  --glow-neon:
+    0 0 6px 1px rgb(243 247 255 / .9), 0 0 28px 6px rgb(214 228 255 / .45), 0 0 110px 26px rgb(190 210 255 / .14),
+    inset 0 0 6px 1px rgb(243 247 255 / .8), inset 0 0 28px 6px rgb(214 228 255 / .35), inset 0 0 90px 16px rgb(190 210 255 / .1);
   --glow-gold: 0 0 0 1px var(--color-line-accent), 0 10px 40px -10px rgb(201 162 107 / .35);
   --shadow-lift: 0 24px 48px -24px rgb(0 0 0 / .8);
 

@@ -112,7 +112,14 @@ a.ls-arch:hover > img, a:hover > .ls-arch > img { transform: scale(1.03); }
 /* ---- Néon circulaire (anneaux lumineux du plafond) ----------------------- */
 .ls-neon {
   width: var(--size, 220px); aspect-ratio: 1; border-radius: var(--radius-round);
+  border: clamp(3px, .45vw, 5px) solid var(--led);
   box-shadow: var(--glow-neon); pointer-events: none;
+}
+/* Allumage quand l'anneau arrive à l'écran (classe posée par site.js) */
+.js .ls-neon[data-ignite] { opacity: 0; }
+.js .ls-neon[data-ignite].is-in { opacity: 1; animation: ls-flicker 1.6s steps(1) 1 both; }
+@media (prefers-reduced-motion: reduce) {
+  .ls-neon--flicker, .js .ls-neon[data-ignite].is-in { animation: none; opacity: 1; }
 }
 .ls-neon--tilt { transform: perspective(600px) rotateX(68deg); }   /* vu d'en bas, comme au plafond */
 .ls-neon--flicker { animation: ls-flicker 1.6s steps(1) 1 both; }    /* allumage, une seule fois */
