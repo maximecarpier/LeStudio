@@ -39,30 +39,21 @@
   $$('[data-hours] [data-days]').forEach(r => { if (r.dataset.days.split(',').map(Number).includes(day)) r.classList.add('is-today'); });
   $$('[data-year]').forEach(el => el.textContent = new Date().getFullYear());
 
-  /* ---- Hero : la photo du salon s'affiche d'abord ; au premier défilement, la vidéo prend le relais, en lecture immédiate ---- */
-  const video = $('[data-video]'), vbtn = $('[data-video-toggle]'), arch = video && video.closest('.hero__arch');
-  if (video && vbtn && arch) {
+  /* ---- Vidéo du salon : lecture quand elle est à l'écran, pause sinon (batterie) ---- */
+  const video = $('[data-video]'), vbtn = $('[data-video-toggle]');
+  if (video && vbtn) {
     const sync = () => {
       const paused = video.paused;
       vbtn.setAttribute('aria-label', paused ? 'Lire la vidéo' : 'Mettre la vidéo en pause');
       vbtn.querySelector('use').setAttribute('href', paused ? '#i-play' : '#i-pause');
     };
-    let started = false;
-    const onScroll = () => { if (scrollY > 24) start(); };
-    const start = () => {
-      if (started) return; started = true;
-      removeEventListener('scroll', onScroll);
-      video.currentTime = 0;
-      // lecture refusée (économie d'énergie) : la photo reste et le bouton ▶ apparaît
-      video.play().catch(() => arch.classList.add('can-play'));
-    };
-    video.addEventListener('playing', () => arch.classList.add('is-video'));
-    vbtn.addEventListener('click', () => { video.paused ? video.play() : video.pause(); });
+    let userPaused = reduce;   // « réduire les animations » : pas de lecture automatique, le bouton ▶ suffit
+    vbtn.addEventListener('click', () => { if (video.paused) { userPaused = false; video.play(); } else { userPaused = true; video.pause(); } });
     video.addEventListener('play', sync); video.addEventListener('pause', sync); sync();
-    if (reduce) arch.classList.add('can-play');   // « réduire les animations » : pas de lecture automatique, le bouton ▶ suffit
-    else { addEventListener('scroll', onScroll, { passive: true }); addEventListener('wheel', start, { passive: true, once: true }); addEventListener('touchmove', start, { passive: true, once: true }); onScroll(); }
-    // économise la batterie quand la vidéo n'est plus visible
-    new IntersectionObserver(([e]) => { if (!e.isIntersecting && !video.paused) { video.pause(); video.dataset.auto = '1'; } else if (e.isIntersecting && video.dataset.auto) { delete video.dataset.auto; video.play().catch(() => {}); } }).observe(video);
+    new IntersectionObserver(([e]) => {
+      if (e.isIntersecting && !userPaused) { video.preload = 'auto'; video.play().catch(() => {}); }
+      else if (!e.isIntersecting && !video.paused) video.pause();
+    }, { threshold: .25 }).observe(video);
   }
 
   /* ---- Menu mobile ---- */
@@ -79,49 +70,43 @@
   const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -10% 0px' });
   $$('[data-reveal], [data-ignite]').forEach(el => io.observe(el));
 
-  /* ---- Boutique : au survol d'un produit, une petite fiche suit la souris (touche : un appui l'ouvre, clavier : le focus) ---- */
-  const tip = $('[data-tip]');
-  if (tip) {
-    const spots = $$('.vitrine__spot');
-    let cur = null, mode = 'follow', anchor = null, tx = 0, ty = 0, x = 0, y = 0, raf = 0, sy = 0;
-    const fill = id => { if (cur === id) return; const tpl = $(`[data-product-card="${id}"]`); if (!tpl) return; tip.replaceChildren(tpl.content.cloneNode(true)); cur = id; };
-    const target = () => {
-      const w = tip.offsetWidth, h = tip.offsetHeight, m = 12;
-      let px, py;
-      if (mode === 'anchor' && anchor) {
-        const r = anchor.getBoundingClientRect();
-        px = r.left + r.width / 2 - w / 2; py = r.top - h - m; if (py < m) py = r.bottom + m;
-      } else {
-        px = tx + 24; py = ty + 24;
-        if (px + w > innerWidth - m) px = tx - w - 24;
-        if (py + h > innerHeight - m) py = ty - h - 24;
-      }
-      return [Math.min(Math.max(m, px), innerWidth - w - m), Math.min(Math.max(m, py), innerHeight - h - m)];
+  /* ---- Boutique : le produit visé s'éclaire (le reste de l'étagère s'assombrit), sa fiche s'affiche sur le mur ---- */
+  const vit = $('[data-vitrine]');
+  if (vit) {
+    const dim = $('.vitrine__dim', vit), inner = $('[data-card-in]', vit), card = $('[data-card]', vit);
+    const spots = $$('.vitrine__spot', vit);
+    let cur = null, swap = 0;
+    const fill = id => {
+      if (cur === id) return; cur = id;
+      const tpl = $(`[data-product-card="${id}"]`); if (!tpl) return;
+      clearTimeout(swap);
+      if (reduce) { inner.replaceChildren(tpl.content.cloneNode(true)); return; }
+      inner.classList.add('is-out');
+      swap = setTimeout(() => { inner.replaceChildren(tpl.content.cloneNode(true)); inner.classList.remove('is-out'); }, 160);
     };
-    const tick = () => {
-      const [px, py] = target();
-      x += (px - x) * (reduce ? 1 : .2); y += (py - y) * (reduce ? 1 : .2);
-      tip.style.transform = `translate3d(${x.toFixed(1)}px,${y.toFixed(1)}px,0)`;
-      raf = tip.classList.contains('is-on') && (Math.abs(px - x) > .4 || Math.abs(py - y) > .4) ? requestAnimationFrame(tick) : 0;
+    const focus = sp => {
+      const r = $('span', sp).getBoundingClientRect(), d = dim.getBoundingClientRect();
+      // centre du projecteur : un peu au-dessus du point, sur le produit
+      dim.style.setProperty('--sx', `${r.left + r.width / 2 - d.left}px`);
+      dim.style.setProperty('--sy', `${r.top - d.top - sp.offsetHeight * .4}px`);
+      spots.forEach(s => s.setAttribute('aria-pressed', s === sp));
+      vit.classList.add('is-focus');
+      fill(sp.dataset.product);
     };
-    const show = (id, m, a) => {
-      mode = m; anchor = a || null; sy = scrollY; fill(id);
-      if (!tip.classList.contains('is-on')) { const [px, py] = target(); x = px; y = py; tip.style.transform = `translate3d(${x}px,${y}px,0)`; }
-      tip.classList.add('is-on'); if (!raf) raf = requestAnimationFrame(tick);
-    };
-    const hide = () => tip.classList.toggle('is-on', false);
+    const blur = () => { vit.classList.remove('is-focus'); spots.forEach(s => s.setAttribute('aria-pressed', 'false')); };
     spots.forEach(sp => {
-      const id = sp.dataset.product;
-      sp.addEventListener('pointerenter', e => { if (e.pointerType === 'touch') return; tx = e.clientX; ty = e.clientY; show(id, 'follow'); });
-      sp.addEventListener('pointermove', e => { if (e.pointerType === 'touch') return; tx = e.clientX; ty = e.clientY; if (!raf) raf = requestAnimationFrame(tick); });
-      sp.addEventListener('pointerleave', e => { if (e.pointerType !== 'touch') hide(); });
-      sp.addEventListener('focus', () => { if (sp.matches(':focus-visible')) show(id, 'anchor', sp); });
-      sp.addEventListener('blur', hide);
-      sp.addEventListener('click', () => { if (matchMedia('(hover: none)').matches) show(id, 'anchor', sp); });
+      sp.setAttribute('aria-pressed', 'false');
+      sp.addEventListener('pointerenter', e => { if (e.pointerType !== 'touch') focus(sp); });
+      sp.addEventListener('focus', () => focus(sp));
+      sp.addEventListener('click', () => {
+        focus(sp);
+        if (matchMedia('(max-width: 1023px)').matches) { const r = card.getBoundingClientRect(); if (r.bottom > innerHeight) card.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'end' }); }
+      });
     });
-    addEventListener('pointerdown', e => { if (e.pointerType === 'touch' && !e.target.closest('.vitrine__spot')) hide(); });
-    addEventListener('scroll', () => { if (mode === 'anchor' && tip.classList.contains('is-on') && Math.abs(scrollY - sy) > 60) hide(); }, { passive: true });
-    addEventListener('keydown', e => { if (e.key === 'Escape') hide(); });
+    $('.vitrine__shelf', vit).addEventListener('pointerleave', e => { if (e.pointerType !== 'touch') blur(); });
+    vit.addEventListener('focusout', e => { if (!vit.contains(e.relatedTarget)) blur(); });
+    addEventListener('pointerdown', e => { if (!e.target.closest('.vitrine__spot, [data-card]')) blur(); });
+    addEventListener('keydown', e => { if (e.key === 'Escape') blur(); });
   }
 
   /* ---- Lien actif dans la navigation ---- */

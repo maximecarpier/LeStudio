@@ -18,7 +18,7 @@
 <link rel="stylesheet" href="design-system/tokens.css">
 <link rel="stylesheet" href="design-system/components.css">
 <link rel="stylesheet" href="assets/css/site.css">
-<link rel="preload" as="image" href="assets/img/salon-fauteuil.webp">
+<link rel="preload" as="image" href="assets/img/salon-fauteuil.webp" fetchpriority="high">
 <script>
 document.documentElement.classList.replace('no-js','js');
 if(!matchMedia('(prefers-reduced-motion: reduce)').matches){var h=document.documentElement;h.classList.add('is-loading');setTimeout(function(){h.classList.remove('is-loading')},6000)}
@@ -91,7 +91,10 @@ if(!matchMedia('(prefers-reduced-motion: reduce)').matches){var h=document.docum
 
 <!-- ============================ HERO ============================ -->
 <section class="hero" id="top">
-  <div class="ls-container hero__grid">
+  <div class="hero__bg">
+    <img class="hero__photo" src="assets/img/salon-fauteuil.webp" alt="Le fauteuil sous sa cape face au miroir en arche, entre le mur de granit et la vitrine" width="1400" height="781" fetchpriority="high">
+  </div>
+  <div class="ls-container hero__inner">
     <div class="hero__text">
       <p class="ls-label" data-enter="1">Barber shop · Ploumagoar</p>
       <h1 class="ls-h1 hero__title" data-enter="2">
@@ -107,15 +110,6 @@ if(!matchMedia('(prefers-reduced-motion: reduce)').matches){var h=document.docum
         <div><dt>Aujourd'hui</dt><dd><span class="ls-status" data-open-status>Mardi au samedi</span></dd></div>
         <div><dt>Adresse</dt><dd>4 rue de la Poste</dd></div>
       </dl>
-    </div>
-
-    <div class="hero__media">
-      <div class="ls-neon ls-neon--tilt ls-neon--flicker hero__neon" aria-hidden="true"></div>
-      <div class="ls-arch ls-arch--outline hero__arch" data-enter-arch>
-        <img class="hero__photo" src="assets/img/salon-fauteuil.webp" alt="Le fauteuil sous sa cape face au miroir en arche, entre le mur de granit et la vitrine" width="1400" height="781" fetchpriority="high">
-        <video src="assets/video/studio.mp4" muted loop playsinline preload="auto" aria-label="Le salon en vidéo : une coupe sous l'anneau lumineux, un dégradé à la tondeuse, le barbier devant le mur en granit" data-video></video>
-        <button class="hero__pause" type="button" aria-label="Mettre la vidéo en pause" data-video-toggle><svg aria-hidden="true"><use href="#i-pause"/></svg></button>
-      </div>
     </div>
   </div>
   <a class="hero__scroll" href="#manifeste" aria-label="Descendre vers la suite"><span></span></a>
@@ -192,9 +186,13 @@ if(!matchMedia('(prefers-reduced-motion: reduce)').matches){var h=document.docum
       <p class="ls-lead">Une ancienne façade de pierre au centre de Ploumagoar, refaite en noir à l'intérieur. Deux grands miroirs en arche, des anneaux au plafond, le LS sur chaque cape.</p>
     </header>
 
-    <figure class="salon__pano" data-reveal>
-      <img src="assets/img/salon-fauteuil.webp" alt="Le fauteuil sous sa cape face au miroir en arche, entre le mur de granit et la vitrine" width="1400" height="781" loading="lazy">
-    </figure>
+    <div class="salon__film">
+      <div class="ls-neon ls-neon--tilt salon__neon" aria-hidden="true" data-ignite></div>
+      <div class="ls-arch ls-arch--outline salon__arch" data-reveal>
+        <video src="assets/video/studio.mp4" muted loop playsinline preload="metadata" poster="assets/img/coupe.webp" aria-label="Le salon en vidéo : une coupe sous l'anneau lumineux, un dégradé à la tondeuse, le barbier devant le mur en granit" data-video></video>
+        <button class="salon__pause" type="button" aria-label="Mettre la vidéo en pause" data-video-toggle><svg aria-hidden="true"><use href="#i-pause"/></svg></button>
+      </div>
+    </div>
 
     <div class="mosaic">
       <figure class="mosaic__a ls-arch" data-reveal><img src="assets/img/tee.webp" alt="Le barbier de dos, t-shirt Le Studio" loading="lazy"></figure>
@@ -220,9 +218,11 @@ if(!matchMedia('(prefers-reduced-motion: reduce)').matches){var h=document.docum
       <p class="ls-lead">Elegance et Skullmen, en vente au salon. Demandez lequel convient à votre coupe, on vous montre comment l'appliquer.</p>
     </header>
 
-    <div class="vitrine">
-      <figure class="vitrine__shelf" data-reveal>
-        <img src="assets/img/etagere-face.webp" alt="Les produits du salon rangés sur trois étagères en chêne, devant un mur noir" width="928" height="1152" loading="lazy">
+  </div>
+  <div class="vitrine" data-vitrine>
+    <div class="vitrine__wall" role="img" aria-label="Les produits du salon rangés sur trois étagères en chêne, devant un mur noir"></div>
+    <div class="vitrine__dim" aria-hidden="true"></div>
+    <div class="vitrine__shelf">
         <button class="vitrine__spot" type="button" style="left:21.9%;top:28%" data-product="pomade" aria-label="Cire brillante, 17 €"><span></span></button>
         <button class="vitrine__spot" type="button" style="left:49.9%;top:28%" data-product="creme" aria-label="Crème coiffante, 16 €"><span></span></button>
         <button class="vitrine__spot" type="button" style="left:78.1%;top:28%" data-product="poudre" aria-label="Poudre coiffante, 16 €"><span></span></button>
@@ -231,10 +231,13 @@ if(!matchMedia('(prefers-reduced-motion: reduce)').matches){var h=document.docum
         <button class="vitrine__spot" type="button" style="left:78.1%;top:60.2%" data-product="laque" aria-label="Laque, 19 €"><span></span></button>
         <button class="vitrine__spot" type="button" style="left:35.8%;top:88.1%" data-product="huile" aria-label="Huile de barbe, 12 €"><span></span></button>
         <button class="vitrine__spot" type="button" style="left:64.3%;top:88.1%" data-product="parfum" aria-label="Parfum, 14 €"><span></span></button>
-      </figure>
-
-      <p class="vitrine__hint" data-reveal><span class="vitrine__hint--mouse">Passez la souris sur un produit.</span><span class="vitrine__hint--touch">Touchez un produit pour le découvrir.</span></p>
-      <div class="vitrine__tip" data-tip aria-hidden="true"></div>
+    </div>
+    <aside class="vitrine__card" aria-live="polite" data-card>
+      <div class="vitrine__card-in" data-card-in>
+        <img src="assets/img/etagere-produits.webp" alt="" width="476" height="720" loading="lazy">
+        <div><p class="vitrine__brand">Elegance · Skullmen</p><h3 class="vitrine__name">8 produits du salon</h3><p class="vitrine__desc"><span class="vitrine__hint--mouse">Survolez un produit sur l'étagère pour le découvrir.</span><span class="vitrine__hint--touch">Touchez un produit sur l'étagère pour le découvrir.</span></p><p class="vitrine__price">De 12 à 19 €</p></div>
+      </div>
+    </aside>
       <template data-product-card="cire-mate"><img src="assets/img/p-cire-mate.webp" alt="Cire mate Elegance" width="420" height="560"><div><p class="vitrine__brand">Elegance</p><h3 class="vitrine__name">Cire mate</h3><p class="vitrine__desc">Tenue forte, fini mat. Pour les coupes texturées et décoiffées.</p><p class="vitrine__price">17 €</p></div></template>
       <template data-product-card="pomade"><img src="assets/img/p-pomade.webp" alt="Cire brillante Elegance" width="420" height="560"><div><p class="vitrine__brand">Elegance</p><h3 class="vitrine__name">Cire brillante</h3><p class="vitrine__desc">Tenue forte, fini brillant. Pour les coiffures plaquées et les raies nettes.</p><p class="vitrine__price">17 €</p></div></template>
       <template data-product-card="creme"><img src="assets/img/p-creme.webp" alt="Crème coiffante Elegance" width="420" height="560"><div><p class="vitrine__brand">Elegance</p><h3 class="vitrine__name">Crème coiffante</h3><p class="vitrine__desc">Tenue légère, effet naturel. Discipline sans figer.</p><p class="vitrine__price">16 €</p></div></template>
@@ -244,7 +247,6 @@ if(!matchMedia('(prefers-reduced-motion: reduce)').matches){var h=document.docum
       <template data-product-card="laque"><img src="assets/img/p-laque.webp" alt="Laque Elegance" width="420" height="560"><div><p class="vitrine__brand">Elegance</p><h3 class="vitrine__name">Laque</h3><p class="vitrine__desc">Fixe la coiffure pour la journée, sans effet cartonné.</p><p class="vitrine__price">19 €</p></div></template>
       <template data-product-card="huile"><img src="assets/img/p-huile.webp" alt="Huile de barbe Skullmen" width="420" height="560"><div><p class="vitrine__brand">Skullmen</p><h3 class="vitrine__name">Huile de barbe</h3><p class="vitrine__desc">Nourrit la barbe et la peau dessous. Quelques gouttes chaque matin.</p><p class="vitrine__price">12 €</p></div></template>
       <template data-product-card="parfum"><img src="assets/img/p-parfum.webp" alt="Parfum Elegance · 7 senteurs" width="420" height="560"><div><p class="vitrine__brand">Elegance · 7 senteurs</p><h3 class="vitrine__name">Parfum</h3><p class="vitrine__desc">Brume parfumée, sept senteurs au choix. Demandez à les sentir au salon.</p><p class="vitrine__price">14 €</p></div></template>
-    </div>
   </div>
 </section>
 
