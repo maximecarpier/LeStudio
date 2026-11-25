@@ -70,42 +70,58 @@
   const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -10% 0px' });
   $$('[data-reveal], [data-ignite]').forEach(el => io.observe(el));
 
-  /* ---- Boutique : le produit visé s'éclaire (le reste de l'étagère s'assombrit), sa fiche s'affiche sur le mur ---- */
+  /* ---- Boutique : le produit visé s'éclaire (le reste de l'étagère s'assombrit) et une étiquette texte suit la souris ---- */
   const vit = $('[data-vitrine]');
   if (vit) {
-    const dim = $('.vitrine__dim', vit), inner = $('[data-card-in]', vit), card = $('[data-card]', vit);
+    const dim = $('.vitrine__dim', vit), tip = $('[data-tip]', vit), tipIn = $('[data-tip-in]', vit);
     const spots = $$('.vitrine__spot', vit);
-    let cur = null, swap = 0;
+    let cur = null, mode = 'follow', anchor = null, tx = 0, ty = 0, x = 0, y = 0, raf = 0, sy = 0;
     const fill = id => {
       if (cur === id) return; cur = id;
-      const tpl = $(`[data-product-card="${id}"]`); if (!tpl) return;
-      clearTimeout(swap);
-      if (reduce) { inner.replaceChildren(tpl.content.cloneNode(true)); return; }
-      inner.classList.add('is-out');
-      swap = setTimeout(() => { inner.replaceChildren(tpl.content.cloneNode(true)); inner.classList.remove('is-out'); }, 160);
+      const tpl = $(`[data-product-card="${id}"]`); if (tpl) tipIn.replaceChildren(tpl.content.cloneNode(true));
     };
-    const focus = sp => {
+    const target = () => {
+      const w = tip.offsetWidth, h = tip.offsetHeight, m = 12;
+      let px, py;
+      if (mode === 'anchor' && anchor) {   // toucher / clavier : au-dessus du produit
+        const r = anchor.getBoundingClientRect();
+        px = r.left + r.width / 2 - w / 2; py = r.top - h - m; if (py < 80) py = r.bottom + m;
+      } else {                            // souris : en bas à droite du curseur, retourné près des bords
+        px = tx + 22; py = ty + 22;
+        if (px + w > innerWidth - m) px = tx - w - 22;
+        if (py + h > innerHeight - m) py = ty - h - 22;
+      }
+      return [Math.min(Math.max(m, px), innerWidth - w - m), Math.min(Math.max(m, py), innerHeight - h - m)];
+    };
+    const tick = () => {
+      const [px, py] = target(), k = reduce ? 1 : .18;
+      x += (px - x) * k; y += (py - y) * k;
+      tip.style.transform = `translate3d(${x.toFixed(1)}px,${y.toFixed(1)}px,0)`;
+      raf = tip.classList.contains('is-on') && (Math.abs(px - x) > .3 || Math.abs(py - y) > .3) ? requestAnimationFrame(tick) : 0;
+    };
+    const focus = (sp, m) => {
       const r = $('span', sp).getBoundingClientRect(), d = dim.getBoundingClientRect();
-      // centre du projecteur : un peu au-dessus du point, sur le produit
       dim.style.setProperty('--sx', `${r.left + r.width / 2 - d.left}px`);
       dim.style.setProperty('--sy', `${r.top - d.top - sp.offsetHeight * .4}px`);
       spots.forEach(s => s.setAttribute('aria-pressed', s === sp));
       vit.classList.add('is-focus');
+      mode = m; anchor = m === 'anchor' ? sp : null; sy = scrollY;
       fill(sp.dataset.product);
+      if (!tip.classList.contains('is-on')) { [x, y] = target(); tip.style.transform = `translate3d(${x}px,${y}px,0)`; }
+      tip.classList.add('is-on'); if (!raf) raf = requestAnimationFrame(tick);
     };
-    const blur = () => { vit.classList.remove('is-focus'); spots.forEach(s => s.setAttribute('aria-pressed', 'false')); };
+    const blur = () => { vit.classList.remove('is-focus'); tip.classList.remove('is-on'); spots.forEach(s => s.setAttribute('aria-pressed', 'false')); };
     spots.forEach(sp => {
       sp.setAttribute('aria-pressed', 'false');
-      sp.addEventListener('pointerenter', e => { if (e.pointerType !== 'touch') focus(sp); });
-      sp.addEventListener('focus', () => focus(sp));
-      sp.addEventListener('click', () => {
-        focus(sp);
-        if (matchMedia('(max-width: 1023px)').matches) { const r = card.getBoundingClientRect(); if (r.bottom > innerHeight) card.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'end' }); }
-      });
+      sp.addEventListener('pointerenter', e => { if (e.pointerType === 'touch') return; tx = e.clientX; ty = e.clientY; focus(sp, 'follow'); });
+      sp.addEventListener('pointermove', e => { if (e.pointerType === 'touch') return; tx = e.clientX; ty = e.clientY; if (!raf) raf = requestAnimationFrame(tick); });
+      sp.addEventListener('focus', () => { if (sp.matches(':focus-visible')) focus(sp, 'anchor'); });
+      sp.addEventListener('click', () => { if (matchMedia('(hover: none)').matches) focus(sp, 'anchor'); });
     });
     $('.vitrine__shelf', vit).addEventListener('pointerleave', e => { if (e.pointerType !== 'touch') blur(); });
     vit.addEventListener('focusout', e => { if (!vit.contains(e.relatedTarget)) blur(); });
-    addEventListener('pointerdown', e => { if (!e.target.closest('.vitrine__spot, [data-card]')) blur(); });
+    addEventListener('pointerdown', e => { if (e.pointerType === 'touch' && !e.target.closest('.vitrine__spot')) blur(); });
+    addEventListener('scroll', () => { if (mode === 'anchor' && tip.classList.contains('is-on') && Math.abs(scrollY - sy) > 60) blur(); }, { passive: true });
     addEventListener('keydown', e => { if (e.key === 'Escape') blur(); });
   }
 
