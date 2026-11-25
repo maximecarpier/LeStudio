@@ -4,6 +4,7 @@
 
 html { scroll-behavior: smooth; scroll-padding-top: 76px; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+html.lenis { scroll-behavior: auto; } /* Lenis gère le défilement : pas de double lissage */
 body { overflow-x: clip; }
 em { font-style: italic; }
 .ls-h2 em { color: var(--ls-ivory-300); }

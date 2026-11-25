@@ -4,7 +4,7 @@
    le monogramme LS didone, la story « Horaires » (or cuivré), l'enseigne.
    ========================================================================== */
 
-@import url("https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400;1,6..96,500&family=Manrope:wght@400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..600;1,9..144,400..600&family=Manrope:wght@400;500;600&display=swap");
 
 :root {
   /* ---- Couleurs · primitives ------------------------------------------- */
@@ -49,7 +49,7 @@
   --color-danger:      var(--ls-red-400);
 
   /* ---- Typographie ------------------------------------------------------ */
-  --font-display: "Bodoni Moda", "Didot", "Bodoni 72", Georgia, serif; /* le LS */
+  --font-display: "Fraunces", Georgia, "Times New Roman", serif; /* titres : chic et robuste */
   --font-sans:    "Manrope", "Helvetica Neue", Arial, sans-serif;      /* l'enseigne */
 
   /* Échelle fluide 390 → 1440 */

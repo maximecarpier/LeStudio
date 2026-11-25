@@ -4,11 +4,17 @@
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  /* ---- Défilement fluide (Lenis) : molette et liens internes glissent en douceur ; rien si « réduire les animations » ---- */
+  const lenis = !reduce && window.Lenis
+    ? new Lenis({ autoRaf: true, lerp: .09, anchors: true, /* tient compte du scroll-padding-top (barre du haut) */stopInertiaOnNavigate: true })
+    : null;
+  if (lenis && document.documentElement.classList.contains('is-loading')) lenis.stop();
+
   /* ---- Écran de chargement : au moins 1,9 s (le temps que le monogramme s'écrive), puis dès que la page est prête ---- */
   const loader = $('[data-loader]');
   if (loader) {
     let done = false;
-    const end = () => { if (done) return; done = true; document.documentElement.classList.toggle('is-loading', false); loader.classList.add('is-done'); setTimeout(() => loader.hidden = true, 900); };
+    const end = () => { if (done) return; done = true; document.documentElement.classList.toggle('is-loading', false); lenis && lenis.start(); loader.classList.add('is-done'); setTimeout(() => loader.hidden = true, 900); };
     const ready = new Promise(r => document.readyState === 'complete' ? r() : addEventListener('load', r, { once: true }));
     Promise.all([ready, new Promise(r => setTimeout(r, 1900))]).then(end);
     setTimeout(end, 5000);
@@ -59,7 +65,7 @@
   /* ---- Menu mobile ---- */
   const toggle = $('[data-menu-toggle]'), sheet = $('[data-menu]');
   if (toggle && sheet) {
-    const set = open => { toggle.setAttribute('aria-expanded', open); sheet.hidden = !open; document.body.style.overflow = open ? 'hidden' : ''; };
+    const set = open => { toggle.setAttribute('aria-expanded', open); sheet.hidden = !open; document.body.style.overflow = open ? 'hidden' : ''; lenis && (open ? lenis.stop() : lenis.start()); };
     toggle.addEventListener('click', () => set(toggle.getAttribute('aria-expanded') !== 'true'));
     sheet.addEventListener('click', e => { if (e.target.closest('a')) set(false); });
     addEventListener('keydown', e => { if (e.key === 'Escape') set(false); });

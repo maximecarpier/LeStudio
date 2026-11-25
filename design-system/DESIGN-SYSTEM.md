@@ -47,7 +47,7 @@ Matières (photo et illustration seulement) : granit `#B9AD99` / `#7D7262`, chê
 
 | Famille | Jeton | Pourquoi | Usage |
 |---|---|---|---|
-| Bodoni Moda (400, 500, italique 400) | `--font-display` | Le contraste fin/épais du monogramme LS | Titres, noms de prestations, signature « LE STUDIO », « À très vite ! » |
+| Fraunces (400 à 600, italique) | `--font-display` | Serif chic mais robuste, lisible en petit comme sur photo | Titres, noms de prestations, signature « LE STUDIO », « À très vite ! » |
 | Manrope (400, 500, 600) | `--font-sans` | La sobriété géométrique de l'enseigne | Texte, boutons, navigation, surtitres |
 
 | Style | Classe | Taille 390 → 1440 |
@@ -62,7 +62,7 @@ Matières (photo et illustration seulement) : granit `#B9AD99` / `#7D7262`, chê
 | Petit | `.ls-small` | 14 |
 | Surtitre | `.ls-label` | 12, Manrope 600, capitales, or |
 
-Règles : titres en 400, jamais en gras. Capitales Bodoni à 18 px minimum ; en dessous, surtitre Manrope. Chiffres tabulaires pour heures et prix. 62 caractères par ligne au plus.
+Règles : titres en 400, jamais en gras. Capitales Fraunces à 18 px minimum ; en dessous, surtitre Manrope. Chiffres tabulaires pour heures et prix. 62 caractères par ligne au plus.
 
 ### Espacement, formes, mouvement
 
@@ -142,11 +142,11 @@ Horaires officiels : mardi au vendredi 9h–13h, 14h–19h ; samedi 9h–13h, 14
 
 ### Lignes de prix — `.ls-price-list` > `.ls-price-row`
 
-Nom (Bodoni, H3), prix (or, chiffres tabulaires), description optionnelle (`__desc`). Un filet sous chaque ligne.
+Nom (Fraunces, H3), prix (or, chiffres tabulaires), description optionnelle (`__desc`). Un filet sous chaque ligne.
 
 ### Carte produit — `.ls-product`
 
-Photo 3:4, marque (surtitre), nom (Bodoni 20), prix (or). Info en plus avec `.ls-tag` (« 7 senteurs »). Survol : la carte monte de 2 px, la photo zoome à 1,03.
+Photo 3:4, marque (surtitre), nom (Fraunces 20), prix (or). Info en plus avec `.ls-tag` (« 7 senteurs »). Survol : la carte monte de 2 px, la photo zoome à 1,03.
 
 ### Carte prestation — `.ls-service`
 

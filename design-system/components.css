@@ -17,9 +17,8 @@ a { color: inherit; }
 ::selection { background: var(--color-accent); color: var(--color-on-accent); }
 
 .ls-container { width: min(100% - 2 * var(--gutter), var(--container)); margin-inline: auto; }
-/* Bodoni Moda : à grande taille, l'axe « opsz » amincit les empattements au point de les faire disparaître.
-   On le fige à son réglage le plus robuste (petite taille) et on passe en graisse 500. */
-html { font-optical-sizing: none; }
+/* Fraunces : l'axe « opsz » reste automatique — trait plus robuste en petit, plus fin et élégant en très grand. */
+html { font-optical-sizing: auto; }
 
 .ls-visually-hidden { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
