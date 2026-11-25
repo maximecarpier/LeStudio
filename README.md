@@ -16,4 +16,4 @@ python3 -m http.server 8000
 
 puis ouvrir http://localhost:8000.
 
-À remplacer avant la mise en ligne : les prix des prestations (provisoires, repérés par `data-assumed` dans `index.html`), les photos et la vidéo en HD, et l'adresse du site dans la balise `canonical`.
+À remplacer avant la mise en ligne : les photos et la vidéo en HD, et l'adresse du site dans la balise `canonical`.
