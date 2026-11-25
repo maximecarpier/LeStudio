@@ -18,8 +18,11 @@
 <link rel="stylesheet" href="design-system/tokens.css">
 <link rel="stylesheet" href="design-system/components.css">
 <link rel="stylesheet" href="assets/css/site.css">
-<link rel="preload" as="image" href="assets/img/poster.webp">
-<script>document.documentElement.classList.replace('no-js','js')</script>
+<link rel="preload" as="image" href="assets/img/salon-fauteuil.webp">
+<script>
+document.documentElement.classList.replace('no-js','js');
+if(!matchMedia('(prefers-reduced-motion: reduce)').matches){var h=document.documentElement;h.classList.add('is-loading');setTimeout(function(){h.classList.remove('is-loading')},6000)}
+</script>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"BarberShop","name":"Le Studio — Barber Shop",
  "address":{"@type":"PostalAddress","streetAddress":"4 rue de la Poste","postalCode":"22970","addressLocality":"Ploumagoar","addressCountry":"FR"},
@@ -32,6 +35,12 @@
 </script>
 </head>
 <body>
+
+<!-- Écran de chargement : le monogramme s'écrit, l'anneau LED s'allume -->
+<div class="loader" data-loader aria-hidden="true">
+  <div class="loader__ring"></div>
+  <img class="loader__mono" src="assets/logo/ls-monogramme.svg" alt="" width="96" height="94">
+</div>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
@@ -103,7 +112,8 @@
     <div class="hero__media">
       <div class="ls-neon ls-neon--tilt ls-neon--flicker hero__neon" aria-hidden="true"></div>
       <div class="ls-arch ls-arch--outline hero__arch" data-enter-arch>
-        <video src="assets/video/studio.mp4" poster="assets/img/poster.webp" muted loop playsinline autoplay preload="metadata" aria-label="Le salon en vidéo : une coupe sous l'anneau lumineux, un dégradé à la tondeuse, le barbier devant le mur en granit" data-video></video>
+        <img class="hero__photo" src="assets/img/salon-fauteuil.webp" alt="Le fauteuil sous sa cape face au miroir en arche, entre le mur de granit et la vitrine" width="1400" height="781" fetchpriority="high">
+        <video src="assets/video/studio.mp4" muted loop playsinline preload="auto" aria-label="Le salon en vidéo : une coupe sous l'anneau lumineux, un dégradé à la tondeuse, le barbier devant le mur en granit" data-video></video>
         <button class="hero__pause" type="button" aria-label="Mettre la vidéo en pause" data-video-toggle><svg aria-hidden="true"><use href="#i-pause"/></svg></button>
       </div>
     </div>
@@ -223,20 +233,8 @@
         <button class="vitrine__spot" type="button" style="left:64.3%;top:88.1%" data-product="parfum" aria-label="Parfum, 14 €"><span></span></button>
       </figure>
 
-      <div class="vitrine__side" data-reveal>
-        <div class="vitrine__card" aria-live="polite" data-product-detail><img src="assets/img/p-pomade.webp" alt="Cire brillante Elegance" width="420" height="560"><div><p class="vitrine__brand">Elegance</p><h3 class="vitrine__name">Cire brillante</h3><p class="vitrine__desc">Tenue forte, fini brillant. Pour les coiffures plaquées et les raies nettes.</p><p class="vitrine__price">17 €</p></div></div>
-        <ul class="vitrine__list" aria-label="Tous les produits">
-          <li><button class="vitrine__item" type="button" data-product="cire-mate" aria-pressed="false"><span class="vitrine__item-name">Cire mate</span><span class="vitrine__item-brand">Elegance</span><span class="vitrine__item-price">17 €</span></button></li>
-          <li><button class="vitrine__item" type="button" data-product="pomade" aria-pressed="true"><span class="vitrine__item-name">Cire brillante</span><span class="vitrine__item-brand">Elegance</span><span class="vitrine__item-price">17 €</span></button></li>
-          <li><button class="vitrine__item" type="button" data-product="creme" aria-pressed="false"><span class="vitrine__item-name">Crème coiffante</span><span class="vitrine__item-brand">Elegance</span><span class="vitrine__item-price">16 €</span></button></li>
-          <li><button class="vitrine__item" type="button" data-product="poudre" aria-pressed="false"><span class="vitrine__item-name">Poudre coiffante</span><span class="vitrine__item-brand">Elegance</span><span class="vitrine__item-price">16 €</span></button></li>
-          <li><button class="vitrine__item" type="button" data-product="mousse" aria-pressed="false"><span class="vitrine__item-name">Mousse coiffante</span><span class="vitrine__item-brand">Skullmen</span><span class="vitrine__item-price">16 €</span></button></li>
-          <li><button class="vitrine__item" type="button" data-product="spray" aria-pressed="false"><span class="vitrine__item-name">Spray salé</span><span class="vitrine__item-brand">Skullmen</span><span class="vitrine__item-price">15 €</span></button></li>
-          <li><button class="vitrine__item" type="button" data-product="laque" aria-pressed="false"><span class="vitrine__item-name">Laque</span><span class="vitrine__item-brand">Elegance</span><span class="vitrine__item-price">19 €</span></button></li>
-          <li><button class="vitrine__item" type="button" data-product="huile" aria-pressed="false"><span class="vitrine__item-name">Huile de barbe</span><span class="vitrine__item-brand">Skullmen</span><span class="vitrine__item-price">12 €</span></button></li>
-          <li><button class="vitrine__item" type="button" data-product="parfum" aria-pressed="false"><span class="vitrine__item-name">Parfum</span><span class="vitrine__item-brand">Elegance · 7 senteurs</span><span class="vitrine__item-price">14 €</span></button></li>
-        </ul>
-      </div>
+      <p class="vitrine__hint" data-reveal><span class="vitrine__hint--mouse">Passez la souris sur un produit.</span><span class="vitrine__hint--touch">Touchez un produit pour le découvrir.</span></p>
+      <div class="vitrine__tip" data-tip aria-hidden="true"></div>
       <template data-product-card="cire-mate"><img src="assets/img/p-cire-mate.webp" alt="Cire mate Elegance" width="420" height="560"><div><p class="vitrine__brand">Elegance</p><h3 class="vitrine__name">Cire mate</h3><p class="vitrine__desc">Tenue forte, fini mat. Pour les coupes texturées et décoiffées.</p><p class="vitrine__price">17 €</p></div></template>
       <template data-product-card="pomade"><img src="assets/img/p-pomade.webp" alt="Cire brillante Elegance" width="420" height="560"><div><p class="vitrine__brand">Elegance</p><h3 class="vitrine__name">Cire brillante</h3><p class="vitrine__desc">Tenue forte, fini brillant. Pour les coiffures plaquées et les raies nettes.</p><p class="vitrine__price">17 €</p></div></template>
       <template data-product-card="creme"><img src="assets/img/p-creme.webp" alt="Crème coiffante Elegance" width="420" height="560"><div><p class="vitrine__brand">Elegance</p><h3 class="vitrine__name">Crème coiffante</h3><p class="vitrine__desc">Tenue légère, effet naturel. Discipline sans figer.</p><p class="vitrine__price">16 €</p></div></template>
