@@ -1,0 +1,219 @@
+/* ==========================================================================
+   LE STUDIO — Composants v1.0  (nécessite tokens.css)
+   Préfixe : ls-   ·   BEM léger : .ls-bloc, .ls-bloc__élément, .ls-bloc--variante
+   ========================================================================== */
+
+/* ---- Base ---------------------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--color-bg); color: var(--color-text);
+  font: var(--weight-regular) var(--text-body)/var(--leading-body) var(--font-sans);
+  -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+}
+img, video, svg { display: block; max-width: 100%; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 3px; }
+::selection { background: var(--color-accent); color: var(--color-on-accent); }
+
+.ls-container { width: min(100% - 2 * var(--gutter), var(--container)); margin-inline: auto; }
+.ls-visually-hidden { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ---- Typographie --------------------------------------------------------- */
+.ls-display, .ls-h1, .ls-h2, .ls-h3 {
+  font-family: var(--font-display); font-weight: var(--weight-regular);
+  letter-spacing: var(--tracking-display); margin: 0; text-wrap: balance;
+}
+.ls-display { font-size: var(--text-display); line-height: .92; }
+.ls-h1 { font-size: var(--text-h1); line-height: var(--leading-tight); }
+.ls-h2 { font-size: var(--text-h2); line-height: 1.05; }
+.ls-h3 { font-size: var(--text-h3); line-height: var(--leading-snug); letter-spacing: -0.01em; }
+.ls-italic { font-style: italic; }                       /* « À très vite ! » */
+.ls-lead { font-size: var(--text-lead); line-height: 1.6; color: var(--color-text-muted); max-width: 52ch; margin: 0; }
+.ls-small { font-size: var(--text-small); color: var(--color-text-muted); }
+
+/* Capitales serif espacées : la signature « LE STUDIO » (≥ 18px seulement) */
+.ls-caps {
+  font-family: var(--font-display); font-weight: var(--weight-medium);
+  text-transform: uppercase; letter-spacing: var(--tracking-caps);
+  font-size: clamp(1.125rem, 1rem + .5vw, 1.5rem); margin-right: calc(-1 * var(--tracking-caps));
+}
+/* Surtitre sans (lisible petit) */
+.ls-label {
+  font-family: var(--font-sans); font-weight: var(--weight-semibold);
+  font-size: var(--text-label); text-transform: uppercase; letter-spacing: var(--tracking-label);
+  color: var(--color-accent); margin: 0;
+}
+
+/* ---- Logo ---------------------------------------------------------------- */
+.ls-logo { display: inline-flex; align-items: center; gap: var(--space-3); text-decoration: none; color: var(--color-text); }
+.ls-logo__mono { width: 40px; height: 40px; flex: none; }
+.ls-logo__words { display: grid; line-height: 1; }
+.ls-logo__name { white-space: nowrap; font-family: var(--font-display); font-weight: 500; font-size: 17px; letter-spacing: .3em; margin-right: -.3em; }
+.ls-logo__sub  { font-family: var(--font-sans); font-weight: 600; font-size: 9.5px; letter-spacing: .42em; color: var(--color-text-muted); margin-top: 6px; }
+.ls-mono text { font-family: var(--font-display); fill: currentColor; }
+
+/* ---- Boutons ------------------------------------------------------------- */
+.ls-btn {
+  --h: 52px;
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--space-3);
+  min-height: var(--h); padding: 0 var(--space-6); border-radius: var(--radius-sm);
+  font: var(--weight-semibold) 13px/1 var(--font-sans); letter-spacing: .16em; text-transform: uppercase;
+  text-decoration: none; white-space: nowrap; cursor: pointer; border: var(--border-hair) solid transparent;
+  transition: background-color var(--dur-base) var(--ease-out), color var(--dur-base) var(--ease-out),
+              border-color var(--dur-base) var(--ease-out), transform var(--dur-fast) var(--ease-out),
+              box-shadow var(--dur-base) var(--ease-out);
+}
+.ls-btn svg { width: 18px; height: 18px; transition: transform var(--dur-base) var(--ease-out); }
+.ls-btn:hover { transform: translateY(-1px); }
+.ls-btn:hover svg { transform: translateX(3px); }
+.ls-btn:active { transform: translateY(1px) scale(.985); }
+
+.ls-btn--primary { background: var(--color-accent); color: var(--color-on-accent); }
+.ls-btn--primary:hover { background: var(--color-accent-hover); box-shadow: var(--glow-gold); }
+.ls-btn--primary:active { background: var(--color-accent-press); }
+
+.ls-btn--secondary { background: transparent; color: var(--color-text); border-color: var(--color-line-strong); }
+.ls-btn--secondary:hover { border-color: var(--color-text); background: rgb(244 241 234 / .04); }
+
+.ls-btn--sm { --h: 44px; padding: 0 var(--space-5); font-size: 12px; }
+.ls-btn--lg { --h: 60px; padding: 0 var(--space-7); font-size: 14px; }
+.ls-btn--block { width: 100%; }
+
+.ls-btn:disabled, .ls-btn[aria-disabled="true"] { opacity: .4; pointer-events: none; }
+.ls-btn[aria-busy="true"] { color: transparent; position: relative; pointer-events: none; }
+.ls-btn[aria-busy="true"]::after {
+  content: ""; position: absolute; width: 18px; height: 18px; border-radius: 50%;
+  border: 2px solid var(--color-on-accent); border-right-color: transparent; animation: ls-spin .8s linear infinite;
+}
+@keyframes ls-spin { to { transform: rotate(1turn); } }
+
+/* Lien texte : soulignement qui se dessine */
+.ls-link {
+  color: var(--color-text); text-decoration: none; font-weight: var(--weight-medium);
+  background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+  transition: background-size var(--dur-base) var(--ease-out), color var(--dur-fast);
+  padding-bottom: 2px;
+}
+.ls-link:hover { background-size: 100% 1px; color: var(--color-accent-hover); }
+.ls-link--arrow::after { content: " →"; display: inline-block; transition: transform var(--dur-base) var(--ease-out); }
+.ls-link--arrow:hover::after { transform: translateX(3px); }
+
+/* ---- Arche : la forme signature (miroirs du salon) ----------------------- */
+.ls-arch {
+  position: relative; overflow: hidden; border-radius: var(--radius-arch);
+  aspect-ratio: var(--ratio, 3 / 5); background: var(--color-surface-2); isolation: isolate;
+}
+.ls-arch > img, .ls-arch > video { width: 100%; height: 100%; object-fit: cover; transition: transform var(--dur-slow) var(--ease-out); }
+.ls-arch--outline { outline: var(--border-hair) solid var(--color-line-accent); outline-offset: 10px; overflow: visible; }
+.ls-arch--outline > img, .ls-arch--outline > video { border-radius: inherit; }
+a.ls-arch:hover > img, a:hover > .ls-arch > img { transform: scale(1.03); }
+
+/* ---- Néon circulaire (anneaux lumineux du plafond) ----------------------- */
+.ls-neon {
+  width: var(--size, 220px); aspect-ratio: 1; border-radius: var(--radius-round);
+  box-shadow: var(--glow-neon); pointer-events: none;
+}
+.ls-neon--tilt { transform: perspective(600px) rotateX(68deg); }   /* vu d'en bas, comme au plafond */
+.ls-neon--flicker { animation: ls-flicker 1.6s steps(1) 1 both; }    /* allumage, une seule fois */
+@keyframes ls-flicker { 0%{opacity:0} 8%{opacity:.8} 12%{opacity:.1} 20%{opacity:.9} 26%{opacity:.3} 34%,100%{opacity:1} }
+
+/* ---- Ornement : filet — ciseaux — filet ---------------------------------- */
+.ls-divider { display: flex; align-items: center; gap: var(--space-4); color: var(--color-accent); }
+.ls-divider::before, .ls-divider::after { content: ""; flex: 1; height: 1px; background: var(--color-line-accent); }
+.ls-divider svg { width: 28px; height: 28px; flex: none; }
+.ls-divider--short { max-width: 320px; }
+
+/* ---- Horaires (repris de la story) --------------------------------------- */
+.ls-hours { margin: 0; display: grid; border-top: 1px solid var(--color-line-accent); }
+.ls-hours__row {
+  display: grid; grid-template-columns: 24px 1fr auto; align-items: center; gap: var(--space-4);
+  padding: var(--space-4) 0; border-bottom: 1px solid var(--color-line);
+}
+.ls-hours__row svg { width: 22px; height: 22px; color: var(--color-accent); }
+.ls-hours dt { font-family: var(--font-display); text-transform: uppercase; letter-spacing: .14em; font-size: 15px; }
+.ls-hours dd { margin: 0; font-variant-numeric: tabular-nums; color: var(--color-accent); font-size: 16px; font-weight: 500; white-space: nowrap; }
+.ls-hours__row--closed dt, .ls-hours__row--closed dd { color: var(--color-text-faint); }
+.ls-hours__row.is-today dt::after { content: " · aujourd'hui"; text-transform: none; letter-spacing: 0; font-family: var(--font-sans); font-size: 13px; color: var(--color-text-muted); }
+
+/* Pastille d'état */
+.ls-status { display: inline-flex; align-items: center; gap: var(--space-2); font-size: var(--text-small); color: var(--color-text-muted); }
+.ls-status::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--color-text-faint); }
+.ls-status--open::before { background: var(--color-success); box-shadow: 0 0 10px var(--color-success); }
+
+/* ---- Lignes de prix (prestations / produits) ----------------------------- */
+.ls-price-list { list-style: none; margin: 0; padding: 0; }
+.ls-price-row {
+  display: grid; grid-template-columns: 1fr auto; gap: var(--space-2) var(--space-5); align-items: baseline;
+  padding: var(--space-5) 0; border-bottom: 1px solid var(--color-line);
+}
+.ls-price-row__name { font-family: var(--font-display); font-size: var(--text-h3); line-height: 1.2; }
+.ls-price-row__price { font-variant-numeric: tabular-nums lining-nums; color: var(--color-accent); font-size: 18px; font-weight: 500; }
+.ls-price-row__desc { grid-column: 1 / -1; margin: 0; color: var(--color-text-muted); max-width: 56ch; }
+
+/* ---- Carte produit -------------------------------------------------------- */
+.ls-product { display: grid; align-content: start; justify-items: start; gap: var(--space-4); text-decoration: none; color: inherit; transition: transform var(--dur-base) var(--ease-out); }
+.ls-product:hover { transform: translateY(-2px); }
+.ls-product__media { width: 100%; overflow: hidden; aspect-ratio: 3 / 4; background: var(--color-surface-2); }
+.ls-product__media img { width: 100%; height: 100%; object-fit: cover; transition: transform var(--dur-slow) var(--ease-out); }
+.ls-product:hover .ls-product__media img { transform: scale(1.03); }
+.ls-product__meta { width: 100%; display: grid; grid-template-columns: 1fr auto; gap: 2px var(--space-3); align-items: baseline; }
+.ls-product__brand { grid-column: 1 / -1; font-size: 12px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--color-text-muted); font-weight: 600; }
+.ls-product__name { font-family: var(--font-display); font-size: 20px; line-height: 1.25; }
+.ls-product__price { color: var(--color-accent); font-variant-numeric: tabular-nums; font-weight: 500; }
+
+/* Étiquette / pastille d'info */
+.ls-tag {
+  display: inline-flex; align-items: center; min-height: 26px; padding: 0 10px;
+  border: 1px solid var(--color-line-strong); border-radius: var(--radius-round);
+  font-size: 12px; font-weight: 500; color: var(--color-text-muted); white-space: nowrap;
+}
+
+/* ---- Carte prestation ---------------------------------------------------- */
+.ls-service { display: grid; gap: var(--space-5); align-content: start; }
+.ls-service__media { --ratio: 4 / 5; }
+.ls-service__num { font-family: var(--font-display); font-style: italic; color: var(--color-accent); font-size: 20px; }
+.ls-service p { margin: 0; color: var(--color-text-muted); }
+
+/* ---- En-tête de section -------------------------------------------------- */
+.ls-section-head { display: grid; gap: var(--space-4); max-width: 720px; margin-bottom: var(--space-8); }
+
+/* ---- Champs de formulaire ------------------------------------------------ */
+.ls-field { display: grid; gap: var(--space-2); }
+.ls-field label { font-size: var(--text-small); font-weight: 500; color: var(--color-text-muted); }
+.ls-input {
+  min-height: 52px; padding: 0 var(--space-4); width: 100%;
+  background: var(--color-surface); color: var(--color-text); font: 16px var(--font-sans);
+  border: 1px solid var(--color-line-strong); border-radius: var(--radius-sm);
+  transition: border-color var(--dur-fast);
+}
+.ls-input:hover { border-color: var(--color-text-muted); }
+.ls-input:focus { outline: none; border-color: var(--color-accent); box-shadow: 0 0 0 3px rgb(201 162 107 / .25); }
+.ls-input[aria-invalid="true"] { border-color: var(--color-danger); }
+.ls-field__error { font-size: var(--text-small); color: var(--color-danger); margin: 0; }
+
+/* ---- Navigation ---------------------------------------------------------- */
+.ls-nav {
+  position: sticky; top: 0; z-index: var(--z-nav); height: 76px;
+  background: rgb(10 10 11 / .92); border-bottom: 1px solid var(--color-line);
+}
+.ls-nav__inner { height: 100%; display: flex; align-items: center; justify-content: space-between; gap: var(--space-6); }
+.ls-nav__links { display: flex; gap: var(--space-6); list-style: none; margin: 0; padding: 0; }
+.ls-nav__links a { font-size: 14px; font-weight: 500; letter-spacing: .04em; }
+.ls-nav__links a[aria-current] { color: var(--color-accent); }
+
+/* Barre d'action mobile */
+.ls-actionbar {
+  position: fixed; inset: auto 0 0; z-index: var(--z-actionbar);
+  padding: var(--space-3) var(--gutter) calc(var(--space-3) + env(safe-area-inset-bottom));
+  background: var(--color-bg); border-top: 1px solid var(--color-line);
+}
+@media (min-width: 768px) { .ls-actionbar { display: none; } }
+@media (max-width: 767px) { .ls-nav__links { display: none; } }
+
+/* ---- Grain de granit (texture d'appoint, très discrète) ------------------ */
+.ls-granite {
+  background-color: var(--color-surface);
+  background-image: radial-gradient(rgb(185 173 153 / .07) 1px, transparent 1.2px), radial-gradient(rgb(0 0 0 / .35) 1px, transparent 1.4px);
+  background-size: 7px 7px, 11px 11px; background-position: 0 0, 3px 5px;
+}

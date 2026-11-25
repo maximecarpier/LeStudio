@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Le Studio · Design system</title>
+<meta name="description" content="Couleurs, typographies, formes, composants et direction photo de Le Studio, barber shop à Ploumagoar.">
+<meta name="theme-color" content="#0a0a0b">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="components.css">
+<style>
+  /* --- mise en page du guide uniquement (pas dans le système) --- */
+  .sg-cover { position: relative; min-height: 100svh; display: grid; place-items: center; overflow: hidden; padding: 120px 0 80px; }
+  .sg-cover .ls-neon { position: absolute; top: -230px; left: 50%; translate: -50% 0; --size: 520px; opacity: .9; }
+  .sg-cover__inner { position: relative; display: grid; justify-items: center; gap: var(--space-6); text-align: center; }
+  .sg-cover__lockup { width: min(78vw, 420px); color: var(--color-text); }
+  .sg-cover__meta { display: flex; gap: var(--space-6); flex-wrap: wrap; justify-content: center; color: var(--color-text-muted); font-size: var(--text-small); }
+
+  .sg-toc { position: sticky; top: 0; z-index: 40; background: rgb(10 10 11 / .94); border-block: 1px solid var(--color-line); }
+  .sg-toc ol { display: flex; gap: var(--space-5); overflow-x: auto; list-style: none; margin: 0; padding: var(--space-4) 0; scrollbar-width: none; }
+  .sg-toc a { font-size: 13px; color: var(--color-text-muted); white-space: nowrap; text-decoration: none; }
+  .sg-toc a:hover { color: var(--color-text); }
+  .sg-toc span { color: var(--color-accent); font-family: var(--font-display); font-style: italic; margin-right: 6px; }
+
+  .sg-section { padding-block: var(--space-10); border-bottom: 1px solid var(--color-line); scroll-margin-top: 56px; }
+  .sg-head { display: grid; grid-template-columns: 1fr; gap: var(--space-4); margin-bottom: var(--space-8); max-width: 760px; }
+  .sg-grid { display: grid; gap: var(--space-5); }
+  .sg-2 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); }
+  .sg-3 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); }
+  .sg-4 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); }
+  .sg-panel { background: var(--color-surface); border: 1px solid var(--color-line); padding: var(--space-6); }
+  .sg-note { font-size: var(--text-small); color: var(--color-text-muted); margin: var(--space-3) 0 0; }
+  .sg-sub { font-family: var(--font-sans); font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--color-text-muted); margin: var(--space-8) 0 var(--space-5); }
+  code { font: 13px/1.5 ui-monospace, "SF Mono", Menlo, monospace; color: var(--ls-gold-300); }
+
+  .sg-principle h3 { margin: var(--space-4) 0 var(--space-3); }
+  .sg-principle p { margin: 0; color: var(--color-text-muted); }
+
+  .sg-swatch { border: 1px solid var(--color-line); }
+  .sg-swatch__chip { height: 120px; display: flex; align-items: flex-end; padding: var(--space-3); font-size: 12px; font-weight: 600; }
+  .sg-swatch__body { padding: var(--space-4); display: grid; gap: 2px; font-size: 13px; }
+  .sg-swatch__body strong { font-size: 15px; font-weight: 500; }
+  .sg-swatch__body span { color: var(--color-text-muted); }
+
+  .sg-type-row { display: grid; grid-template-columns: 160px 1fr; gap: var(--space-5); align-items: baseline; padding: var(--space-5) 0; border-bottom: 1px solid var(--color-line); }
+  .sg-type-row > div:first-child { font-size: 12px; color: var(--color-text-muted); line-height: 1.5; }
+  @media (max-width: 640px) { .sg-type-row { grid-template-columns: 1fr; gap: var(--space-2); } }
+
+  .sg-specimen { font-family: var(--font-display); font-size: clamp(80px, 14vw, 200px); line-height: .9; letter-spacing: -.03em; }
+  .sg-specimen--sans { font-family: var(--font-sans); font-weight: 600; letter-spacing: -.04em; }
+
+  .sg-logo-stage { aspect-ratio: 4 / 3; display: grid; place-items: center; background: var(--color-surface); border: 1px solid var(--color-line); position: relative; }
+  .sg-logo-stage--ivory { background: var(--ls-ivory-50); color: var(--ls-black-950); }
+  .sg-logo-stage--ivory .ls-logo { color: var(--ls-black-950); }
+  .sg-logo-stage--ivory .ls-logo__sub { color: #4a4740; }
+  .sg-logo-stage--stone { background: url(../assets/img/mur-granit.webp) center/cover; }
+  .sg-clear { outline: 1px dashed var(--color-line-accent); outline-offset: 24px; }
+  .sg-dont { position: relative; }
+  .sg-dont::after { content: "✕"; position: absolute; top: 10px; right: 14px; color: var(--color-danger); font-size: 18px; }
+
+  .sg-spacing { display: flex; align-items: flex-end; gap: var(--space-4); flex-wrap: wrap; }
+  .sg-spacing div { background: var(--color-line-accent); }
+  .sg-spacing figure { margin: 0; display: grid; gap: 8px; justify-items: center; font-size: 12px; color: var(--color-text-muted); }
+
+  .sg-motion-demo { height: 6px; background: var(--color-line); position: relative; overflow: hidden; }
+  .sg-motion-demo i { position: absolute; inset: 0 auto 0 0; width: 30%; background: var(--color-accent); animation: sg-slide 2.4s var(--ease) infinite alternate; }
+  @keyframes sg-slide { to { left: 70%; } }
+  @media (prefers-reduced-motion: reduce) { .sg-motion-demo i { animation: none; } }
+
+  .sg-states { display: flex; flex-wrap: wrap; gap: var(--space-5); align-items: center; }
+  .sg-states figure { margin: 0; display: grid; gap: var(--space-3); justify-items: start; }
+  .sg-states figcaption { font-size: 12px; color: var(--color-text-muted); }
+  .is-hover.ls-btn--primary { background: var(--color-accent-hover); box-shadow: var(--glow-gold); transform: translateY(-1px); }
+  .is-hover.ls-btn--secondary { border-color: var(--color-text); background: rgb(244 241 234 / .04); }
+  .is-active.ls-btn--primary { background: var(--color-accent-press); }
+  .is-focus { outline: 2px solid var(--color-focus); outline-offset: 3px; }
+
+  .sg-icons { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: var(--space-4); }
+  .sg-icons figure { margin: 0; display: grid; gap: var(--space-3); justify-items: center; padding: var(--space-5) var(--space-3); border: 1px solid var(--color-line); font-size: 12px; color: var(--color-text-muted); }
+  .sg-icons svg { width: 28px; height: 28px; color: var(--color-accent); }
+
+  .sg-photos { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; }
+  .sg-photos img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; }
+  @media (max-width: 768px) { .sg-photos { grid-template-columns: repeat(2, 1fr); } }
+
+  .sg-hero { position: relative; display: grid; grid-template-columns: 1.15fr .85fr; gap: var(--space-8); align-items: center; padding: var(--space-8); background: var(--color-bg); border: 1px solid var(--color-line); overflow: hidden; }
+  .sg-hero .ls-neon { position: absolute; --size: 300px; right: 7%; top: -210px; }
+  .sg-hero__text { display: grid; gap: var(--space-5); position: relative; }
+  .sg-hero .ls-arch { max-width: 360px; justify-self: end; width: 100%; }
+  @media (max-width: 860px) { .sg-hero { grid-template-columns: 1fr; padding: var(--space-5); } .sg-hero .ls-arch { justify-self: start; } }
+
+  .sg-mock-nav { position: relative; }
+  .sg-mock-bar { position: relative; inset: auto; max-width: 390px; padding-inline: 24px; }
+  @media (min-width: 768px) { .sg-mock-bar.ls-actionbar { display: block; } }
+</style>
+</head>
+<body>
+
+<!-- ===== Sprites : monogramme, lockup en arc, icônes ===== -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="ls-mono" viewBox="0 0 100 100">
+      <!-- Reconstitution typographique du monogramme. À remplacer par le fichier vectoriel officiel. -->
+      <text x="20" y="74" font-size="78" font-family="Bodoni Moda, Didot, serif" font-weight="400" fill="currentColor">L</text>
+      <text x="42" y="90" font-size="78" font-family="Bodoni Moda, Didot, serif" font-weight="400" fill="currentColor">S</text>
+    </symbol>
+    <symbol id="i-scissors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M8.2 8.1 20 19M8.2 15.9 20 5M12.5 12h.01"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><rect x="3.5" y="5" width="17" height="15.5" rx="1.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></symbol>
+    <symbol id="i-instagram" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r=".6" fill="currentColor"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-razor" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15 15 3l3 3-9 9H3Z"/><path d="M9 15l6 6 3-3-6-6"/></symbol>
+    <symbol id="i-comb" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><rect x="3" y="7" width="18" height="4" rx="1"/><path d="M5 11v6M8 11v6M11 11v6M14 11v6M17 11v6M20 11v4"/></symbol>
+    <symbol id="i-bag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M5 8h14l-1 12.5H6L5 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></symbol>
+  </defs>
+</svg>
+
+<!-- ===== Couverture ===== -->
+<header class="sg-cover">
+  <div class="ls-neon ls-neon--tilt ls-neon--flicker" aria-hidden="true"></div>
+  <div class="sg-cover__inner">
+    <svg class="sg-cover__lockup" viewBox="0 0 400 360" role="img" aria-label="Le Studio, barbershop">
+      <defs><path id="arc" d="M 70 170 A 130 130 0 0 1 330 170"/></defs>
+      <text font-family="Bodoni Moda, serif" font-size="34" letter-spacing="9" fill="currentColor"><textPath href="#arc" startOffset="50%" text-anchor="middle">LE STUDIO</textPath></text>
+      <use href="#ls-mono" x="135" y="110" width="130" height="130"/>
+      <text x="200" y="300" text-anchor="middle" font-family="Manrope, sans-serif" font-weight="600" font-size="13" letter-spacing="7" fill="currentColor" opacity=".75">BARBERSHOP</text>
+      <line x1="180" y1="322" x2="220" y2="322" stroke="currentColor" stroke-opacity=".5"/>
+    </svg>
+    <p class="ls-label">Design system · v1.0 · novembre 2026</p>
+    <div class="sg-cover__meta"><span>Le Studio — Barber Shop</span><span>Ploumagoar, Côtes-d'Armor</span><span>@lestudio.barber</span></div>
+  </div>
+</header>
+
+<nav class="sg-toc" aria-label="Sommaire">
+  <div class="ls-container">
+    <ol>
+      <li><a href="#principes"><span>01</span>Principes</a></li>
+      <li><a href="#couleurs"><span>02</span>Couleurs</a></li>
+      <li><a href="#typo"><span>03</span>Typographie</a></li>
+      <li><a href="#logo"><span>04</span>Logo</a></li>
+      <li><a href="#formes"><span>05</span>Formes &amp; motifs</a></li>
+      <li><a href="#rythme"><span>06</span>Espace &amp; mouvement</a></li>
+      <li><a href="#composants"><span>07</span>Composants</a></li>
+      <li><a href="#icones"><span>08</span>Icônes</a></li>
+      <li><a href="#photo"><span>09</span>Photo</a></li>
+      <li><a href="#exemple"><span>10</span>Mise en situation</a></li>
+    </ol>
+  </div>
+</nav>
+
+<main>
+
+<!-- ===== 01 Principes ===== -->
+<section class="sg-section" id="principes"><div class="ls-container">
+  <div class="sg-head"><p class="ls-label">01 — Principes</p><h2 class="ls-h2">Le salon, traduit en écran.</h2>
+    <p class="ls-lead">Chaque règle vient de ce qu'on voit en poussant la porte du 4 rue de la Poste : des murs noirs, le granit d'origine, deux grands miroirs en arche, des anneaux de lumière au plafond, et le LS brodé sur chaque cape.</p></div>
+  <div class="sg-grid sg-4">
+    <article class="sg-principle"><span class="ls-service__num">i.</span><h3 class="ls-h3">Le noir d'abord</h3><p>Le fond est noir, comme les murs. Le blanc ivoire porte le texte ; rien n'est gris moyen.</p></article>
+    <article class="sg-principle"><span class="ls-service__num">ii.</span><h3 class="ls-h3">L'arche</h3><p>Les miroirs du salon donnent notre seule forme courbe. Elle cadre les photos et la vidéo phares, jamais les boutons.</p></article>
+    <article class="sg-principle"><span class="ls-service__num">iii.</span><h3 class="ls-h3">La lumière</h3><p>Pas d'ombres portées : sur du noir, on éclaire. L'anneau néon et la lueur dorée remplacent l'élévation.</p></article>
+    <article class="sg-principle"><span class="ls-service__num">iv.</span><h3 class="ls-h3">L'or, avec retenue</h3><p>Le cuivre doré de la story horaires signale l'action, les prix et les heures. Moins de 5 % d'un écran.</p></article>
+  </div>
+</div></section>
+
+<!-- ===== 02 Couleurs ===== -->
+<section class="sg-section" id="couleurs"><div class="ls-container">
+  <div class="sg-head"><p class="ls-label">02 — Couleurs</p><h2 class="ls-h2">Noir mur, ivoire monogramme, or cuivré.</h2>
+    <p class="ls-lead">Les composants n'utilisent que les jetons sémantiques (<code>--color-*</code>). Les primitives (<code>--ls-*</code>) servent à définir ces jetons.</p></div>
+
+  <h3 class="sg-sub">Fond &amp; surfaces</h3>
+  <div class="sg-grid sg-4">
+    <div class="sg-swatch"><div class="sg-swatch__chip" style="background:#0a0a0b;color:#f4f1ea">Aa</div><div class="sg-swatch__body"><strong>Noir mur</strong><code>--color-bg</code><span>#0A0A0B · ls-black-950</span></div></div>
+    <div class="sg-swatch"><div class="sg-swatch__chip" style="background:#111113;color:#f4f1ea">Aa</div><div class="sg-swatch__body"><strong>Surface</strong><code>--color-surface</code><span>#111113 · ls-black-900</span></div></div>
+    <div class="sg-swatch"><div class="sg-swatch__chip" style="background:#19191c;color:#f4f1ea">Aa</div><div class="sg-swatch__body"><strong>Surface levée</strong><code>--color-surface-2</code><span>#19191C · ls-black-800</span></div></div>
+    <div class="sg-swatch"><div class="sg-swatch__chip" style="background:#242428;color:#f4f1ea">Aa</div><div class="sg-swatch__body"><strong>Surface survol</strong><code>--color-surface-hover</code><span>#242428 · ls-black-700</span></div></div>
+  </div>
+
+  <h3 class="sg-sub">Texte</h3>
+  <div class="sg-grid sg-4">
+    <div class="sg-swatch"><div class="sg-swatch__chip" style="background:#f4f1ea;color:#0a0a0b">17,5:1</div><div class="sg-swatch__body"><strong>Ivoire</strong><code>--color-text</code><span>#F4F1EA · tout le texte courant</span></div></div>
+    <div class="sg-swatch"><div class="sg-swatch__chip" style="background:#a29d93;color:#0a0a0b">7,3:1</div><div class="sg-swatch__body"><strong>Ivoire atténué</strong><code>--color-text-muted</code><span>#A29D93 · descriptions, méta</span></div></div>
+    <div class="sg-swatch"><div class="sg-swatch__chip" style="background:#6f6b64;color:#0a0a0b">3,7:1</div><div class="sg-swatch__body"><strong>Ivoire éteint</strong><code>--color-text-faint</code><span>#6F6B64 · déco, désactivé, ≥ 24 px</span></div></div>
+    <div class="sg-swatch"><div class="sg-swatch__chip" style="background:linear-gradient(90deg,rgb(244 241 234/.12) 50%,rgb(244 241 234/.28) 50%);color:#f4f1ea">filets</div><div class="sg-swatch__body"><strong>Filets</strong><code>--color-line / -strong</code><span>Ivoire 12 % / 28 %</span></div></div>
+  </div>
+
+  <h3 class="sg-sub">Accent or cuivré</h3>
+  <div class="sg-grid sg-4">
+    <div class="sg-swatch"><div class="sg-swatch__chip" style="background:#e2c595;color:#0a0a0b">Survol</div><div class="sg-swatch__body"><strong>Or clair</strong><code>--color-accent-hover</code><span>#E2C595 · ls-gold-300, anneau de focus</span></div></div>
+    <div class="sg-swatch"><div class="sg-swatch__chip" style="background:#c9a26b;color:#0a0a0b">8,4:1</div><div class="sg-swatch__body"><strong>Or cuivré</strong><code>--color-accent</code><span>#C9A26B · ls-gold-500</span></div></div>
+    <div class="sg-swatch"><div class="sg-swatch__chip" style="background:#9c7a48;color:#0a0a0b">Pressé</div><div class="sg-swatch__body"><strong>Or profond</strong><code>--color-accent-press</code><span>#9C7A48 · ls-gold-700</span></div></div>
+    <div class="sg-swatch"><div class="sg-swatch__chip" style="background:rgb(201 162 107/.55);color:#f4f1ea">filet or</div><div class="sg-swatch__body"><strong>Filet or</strong><code>--color-line-accent</code><span>Or 55 % · ornements, arches</span></div></div>
+  </div>
+
+  <h3 class="sg-sub">Matières (photo et illustrations seulement)</h3>
+  <div class="sg-grid sg-4">
+    <div class="sg-swatch"><div class="sg-swatch__chip" style="background:#b9ad99;color:#0a0a0b">Granit</div><div class="sg-swatch__body"><strong>Granit clair</strong><code>--ls-granite-300</code><span>#B9AD99</span></div></div>
+    <div class="sg-swatch"><div class="sg-swatch__chip" style="background:#7d7262;color:#f4f1ea">Granit</div><div class="sg-swatch__body"><strong>Granit ombre</strong><code>--ls-granite-600</code><span>#7D7262</span></div></div>
+    <div class="sg-swatch"><div class="sg-swatch__chip" style="background:#b08a62;color:#0a0a0b">Chêne</div><div class="sg-swatch__body"><strong>Chêne</strong><code>--ls-oak-400</code><span>#B08A62 · parquet, étagères</span></div></div>
+    <div class="sg-swatch"><div class="sg-swatch__chip" style="background:linear-gradient(90deg,#8cc29a 50%,#e2796a 50%);color:#0a0a0b">état</div><div class="sg-swatch__body"><strong>Succès / erreur</strong><code>--color-success / -danger</code><span>#8CC29A · #E2796A</span></div></div>
+  </div>
+</div></section>
+
+<!-- ===== 03 Typographie ===== -->
+<section class="sg-section" id="typo"><div class="ls-container">
+  <div class="sg-head"><p class="ls-label">03 — Typographie</p><h2 class="ls-h2">Un didone pour le nom, un sans pour l'enseigne.</h2>
+    <p class="ls-lead">Bodoni Moda reprend le contraste fin/épais du monogramme LS. Manrope reprend la sobriété géométrique de l'enseigne « LE STUDIO — BARBER SHOP ». Deux familles, pas une de plus.</p></div>
+
+  <div class="sg-grid sg-2">
+    <div class="sg-panel"><div class="sg-specimen">Aa</div><p class="ls-h3" style="margin-top:24px">Bodoni Moda</p><p class="sg-note">Titres, noms de prestations, prix en grand, citation « À très vite ». Graisses 400 et 500, italique 400. <code>--font-display</code></p></div>
+    <div class="sg-panel"><div class="sg-specimen sg-specimen--sans">Aa</div><p class="ls-h3" style="margin-top:24px">Manrope</p><p class="sg-note">Texte courant, boutons, surtitres, navigation. Graisses 400, 500, 600. <code>--font-sans</code></p></div>
+  </div>
+
+  <h3 class="sg-sub">Échelle (fluide de 390 à 1440 px)</h3>
+  <div class="sg-type-row"><div>Display · 56 → 144<br><code>.ls-display</code></div><div class="ls-display">Le Studio</div></div>
+  <div class="sg-type-row"><div>H1 · 40 → 88<br><code>.ls-h1</code></div><div class="ls-h1">Barber shop à Ploumagoar</div></div>
+  <div class="sg-type-row"><div>H2 · 32 → 56<br><code>.ls-h2</code></div><div class="ls-h2">Coupe, barbe et finitions</div></div>
+  <div class="sg-type-row"><div>H3 · 22 → 28<br><code>.ls-h3</code></div><div class="ls-h3">Taille de barbe à la lame</div></div>
+  <div class="sg-type-row"><div>Signature · ≥ 18<br><code>.ls-caps</code></div><div class="ls-caps">Le Studio</div></div>
+  <div class="sg-type-row"><div>Italique<br><code>.ls-h2.ls-italic</code></div><div class="ls-h2 ls-italic">À très vite !</div></div>
+  <div class="sg-type-row"><div>Lead · 18 → 20<br><code>.ls-lead</code></div><p class="ls-lead">Coupes homme, dégradés et barbe, du mardi au samedi, dans un salon en granit au centre de Ploumagoar.</p></div>
+  <div class="sg-type-row"><div>Corps · 16 / 1.65<br><code>body</code></div><p style="margin:0;max-width:62ch">On prend le temps de parler de ce que vous voulez avant de sortir la tondeuse. Shampoing, coupe, coiffage et un conseil produit si vous le souhaitez.</p></div>
+  <div class="sg-type-row"><div>Petit · 14<br><code>.ls-small</code></div><span class="ls-small">Texte secondaire, mentions, notes.</span></div>
+  <div class="sg-type-row"><div>Surtitre · 12 caps<br><code>.ls-label</code></div><p class="ls-label">Nos prestations</p></div>
+  <p class="sg-note">Règles : titres en 400, jamais en gras. Capitales espacées en Bodoni seulement à 18 px et plus (les déliés disparaissent en dessous) ; plus petit, on passe au surtitre Manrope 600. Chiffres tabulaires pour les heures et les prix. Lignes de 62 caractères maximum.</p>
+</div></section>
+
+<!-- ===== 04 Logo ===== -->
+<section class="sg-section" id="logo"><div class="ls-container">
+  <div class="sg-head"><p class="ls-label">04 — Logo</p><h2 class="ls-h2">Trois versions du monogramme LS.</h2>
+    <p class="ls-lead">Le lockup en arc vient de la vidéo et du t-shirt ; la version horizontale sert la navigation ; le monogramme seul sert l'icône et les petits formats.</p></div>
+  <div class="sg-grid sg-3">
+    <div>
+      <div class="sg-logo-stage"><svg viewBox="0 0 400 360" style="width:62%" role="img" aria-label="Lockup en arc"><defs><path id="arc2" d="M 70 170 A 130 130 0 0 1 330 170"/></defs><text font-family="Bodoni Moda, serif" font-size="34" letter-spacing="9" fill="#f4f1ea"><textPath href="#arc2" startOffset="50%" text-anchor="middle">LE STUDIO</textPath></text><use href="#ls-mono" x="135" y="110" width="130" height="130" color="#f4f1ea"/><text x="200" y="300" text-anchor="middle" font-family="Manrope, sans-serif" font-weight="600" font-size="13" letter-spacing="7" fill="#f4f1ea" opacity=".75">BARBERSHOP</text></svg></div>
+      <p class="sg-note"><strong style="color:var(--color-text)">Arc</strong> · couverture, pied de page, réseaux, cape.</p>
+    </div>
+    <div>
+      <div class="sg-logo-stage"><a class="ls-logo sg-clear" href="#logo"><svg class="ls-logo__mono" aria-hidden="true"><use href="#ls-mono"/></svg><span class="ls-logo__words"><span class="ls-logo__name">LE STUDIO</span><span class="ls-logo__sub">BARBER SHOP</span></span></a></div>
+      <p class="sg-note"><strong style="color:var(--color-text)">Horizontal</strong> · navigation. Zone de protection en pointillés = hauteur du « L ».</p>
+    </div>
+    <div>
+      <div class="sg-logo-stage"><svg viewBox="0 0 100 100" style="width:34%;color:#f4f1ea" role="img" aria-label="Monogramme LS"><use href="#ls-mono"/></svg></div>
+      <p class="sg-note"><strong style="color:var(--color-text)">Monogramme</strong> · favicon, avatar, filigrane. 24 px minimum.</p>
+    </div>
+  </div>
+  <h3 class="sg-sub">Sur d'autres fonds</h3>
+  <div class="sg-grid sg-3">
+    <div class="sg-logo-stage sg-logo-stage--ivory"><a class="ls-logo" href="#logo"><svg class="ls-logo__mono" aria-hidden="true"><use href="#ls-mono"/></svg><span class="ls-logo__words"><span class="ls-logo__name">LE STUDIO</span><span class="ls-logo__sub">BARBER SHOP</span></span></a></div>
+    <div class="sg-logo-stage sg-dont" style="background:#c9a26b"><a class="ls-logo" href="#logo" style="color:#f4f1ea"><svg class="ls-logo__mono" aria-hidden="true"><use href="#ls-mono"/></svg><span class="ls-logo__words"><span class="ls-logo__name">LE STUDIO</span><span class="ls-logo__sub" style="color:#f4f1ea">BARBER SHOP</span></span></a></div>
+    <div class="sg-logo-stage sg-dont"><a class="ls-logo" href="#logo" style="color:#c9a26b;transform:skewX(-12deg)"><svg class="ls-logo__mono" aria-hidden="true"><use href="#ls-mono"/></svg><span class="ls-logo__words"><span class="ls-logo__name">LE STUDIO</span><span class="ls-logo__sub" style="color:#c9a26b">BARBER SHOP</span></span></a></div>
+  </div>
+  <p class="sg-note">Le logo reste ivoire sur noir ou noir sur ivoire. Jamais en or, jamais sur l'or, jamais déformé, incliné ou ombré.<br>Note : ce monogramme est une reconstitution typographique. Il faut le remplacer par le fichier vectoriel d'origine (SVG ou PDF) dès qu'on l'a.</p>
+</div></section>
+
+<!-- ===== 05 Formes & motifs ===== -->
+<section class="sg-section" id="formes"><div class="ls-container">
+  <div class="sg-head"><p class="ls-label">05 — Formes &amp; motifs</p><h2 class="ls-h2">L'arche, l'anneau, les ciseaux.</h2>
+    <p class="ls-lead">Trois motifs tirés du lieu. Un seul par écran en vedette, pour qu'ils restent forts.</p></div>
+  <div class="sg-grid sg-3">
+    <div class="sg-panel" style="display:grid;gap:24px">
+      <div class="ls-arch ls-arch--outline" style="--ratio:3/4.4;max-width:240px"><img src="../assets/img/coupe.webp" alt="Coupe en cours sous un anneau lumineux, cape LS"></div>
+      <div><h3 class="ls-h3">Arche</h3><p class="sg-note"><code>.ls-arch</code> · <code>--radius-arch</code>. Variante <code>--outline</code> : un filet or décalé de 10 px, comme le cadre du miroir. Pour la photo ou la vidéo principale d'une section.</p></div>
+    </div>
+    <div class="sg-panel" style="display:grid;gap:24px;align-content:start">
+      <div style="height:300px;display:grid;place-items:center;overflow:hidden"><div class="ls-neon ls-neon--tilt" style="--size:240px"></div></div>
+      <div><h3 class="ls-h3">Anneau néon</h3><p class="sg-note"><code>.ls-neon</code> · <code>--glow-neon</code>. Vu en perspective (<code>--tilt</code>) comme au plafond. S'allume une fois au chargement (<code>--flicker</code>), puis reste fixe.</p></div>
+    </div>
+    <div class="sg-panel" style="display:grid;gap:24px;align-content:start">
+      <div style="height:300px;display:grid;align-content:center;gap:40px">
+        <div class="ls-divider"><svg aria-hidden="true"><use href="#i-scissors"/></svg></div>
+        <div class="ls-granite" style="height:150px"></div>
+      </div>
+      <div><h3 class="ls-h3">Ornement &amp; grain</h3><p class="sg-note"><code>.ls-divider</code> : filet, ciseaux, filet, repris de la story. <code>.ls-granite</code> : grain très discret pour un fond sans photo.</p></div>
+    </div>
+  </div>
+</div></section>
+
+<!-- ===== 06 Espace & mouvement ===== -->
+<section class="sg-section" id="rythme"><div class="ls-container">
+  <div class="sg-head"><p class="ls-label">06 — Espace &amp; mouvement</p><h2 class="ls-h2">Beaucoup d'air, peu de mouvement.</h2></div>
+  <div class="sg-grid sg-2">
+    <div>
+      <h3 class="sg-sub" style="margin-top:0">Espacement · base 4</h3>
+      <div class="sg-spacing">
+        <figure><div style="width:4px;height:4px"></div>4</figure><figure><div style="width:8px;height:8px"></div>8</figure><figure><div style="width:12px;height:12px"></div>12</figure><figure><div style="width:16px;height:16px"></div>16</figure><figure><div style="width:24px;height:24px"></div>24</figure><figure><div style="width:32px;height:32px"></div>32</figure><figure><div style="width:48px;height:48px"></div>48</figure><figure><div style="width:64px;height:64px"></div>64</figure><figure><div style="width:96px;height:96px"></div>96</figure>
+      </div>
+      <p class="sg-note"><code>--space-1</code> à <code>--space-11</code> (4 → 192). Section : <code>--section-y</code> (96 → 192). Gouttière : <code>--gutter</code> (20 → 80). Conteneur : 1280 px.</p>
+    </div>
+    <div>
+      <h3 class="sg-sub" style="margin-top:0">Mouvement</h3>
+      <div style="display:grid;gap:20px">
+        <div><div class="sg-motion-demo" style="--ease:var(--ease-out)"><i></i></div><p class="sg-note"><code>--ease-out</code> · cubic-bezier(.22, 1, .36, 1) · tout ce qui arrive</p></div>
+        <div><div class="sg-motion-demo" style="--ease:var(--ease-in-out)"><i></i></div><p class="sg-note"><code>--ease-in-out</code> · cubic-bezier(.65, 0, .35, 1) · ce qui se déplace</p></div>
+      </div>
+      <p class="sg-note">150 ms couleur et soulignement · 250 ms boutons et cartes · 600 ms zoom photo · 1100 ms entrée du hero (une fois). Survol : carte +2 px, photo ×1,03, flèche +3 px. Avec « réduire les animations », tout est immobile.</p>
+    </div>
+  </div>
+</div></section>
+
+<!-- ===== 07 Composants ===== -->
+<section class="sg-section" id="composants"><div class="ls-container">
+  <div class="sg-head"><p class="ls-label">07 — Composants</p><h2 class="ls-h2">Les pièces du site.</h2></div>
+
+  <h3 class="sg-sub">Boutons · états</h3>
+  <div class="sg-states">
+    <figure><a class="ls-btn ls-btn--primary" href="#composants">Réserver <svg aria-hidden="true"><use href="#i-arrow"/></svg></a><figcaption>Primaire · repos</figcaption></figure>
+    <figure><span class="ls-btn ls-btn--primary is-hover">Réserver <svg aria-hidden="true"><use href="#i-arrow"/></svg></span><figcaption>Survol</figcaption></figure>
+    <figure><span class="ls-btn ls-btn--primary is-active">Réserver <svg aria-hidden="true"><use href="#i-arrow"/></svg></span><figcaption>Pressé</figcaption></figure>
+    <figure><span class="ls-btn ls-btn--primary is-focus">Réserver <svg aria-hidden="true"><use href="#i-arrow"/></svg></span><figcaption>Focus clavier</figcaption></figure>
+    <figure><button class="ls-btn ls-btn--primary" aria-busy="true">Réserver</button><figcaption>Chargement</figcaption></figure>
+    <figure><button class="ls-btn ls-btn--primary" disabled>Réserver</button><figcaption>Désactivé</figcaption></figure>
+  </div>
+  <div class="sg-states" style="margin-top:32px">
+    <figure><a class="ls-btn ls-btn--secondary" href="#composants">Voir l'itinéraire</a><figcaption>Secondaire · repos</figcaption></figure>
+    <figure><span class="ls-btn ls-btn--secondary is-hover">Voir l'itinéraire</span><figcaption>Survol</figcaption></figure>
+    <figure><a class="ls-btn ls-btn--primary ls-btn--sm" href="#composants">Réserver</a><figcaption>Petit · 44 px</figcaption></figure>
+    <figure><a class="ls-btn ls-btn--primary ls-btn--lg" href="#composants">Prendre rendez-vous <svg aria-hidden="true"><use href="#i-arrow"/></svg></a><figcaption>Grand · 60 px</figcaption></figure>
+    <figure><a class="ls-link ls-link--arrow" href="#composants">Voir tous les produits</a><figcaption>Lien texte</figcaption></figure>
+  </div>
+  <p class="sg-note">Un seul bouton primaire (or) par écran : l'action « Réserver ». Libellé = verbe + objet, en capitales espacées Manrope.</p>
+
+  <h3 class="sg-sub">Horaires &amp; état</h3>
+  <div class="sg-grid sg-2">
+    <div class="sg-panel">
+      <p style="margin:0 0 20px"><span class="ls-status" data-open-status>Horaires</span></p>
+      <dl class="ls-hours" data-hours>
+        <div class="ls-hours__row" data-days="2,3,4,5"><svg aria-hidden="true"><use href="#i-calendar"/></svg><dt>Mardi au vendredi</dt><dd>9h – 13h · 14h – 19h</dd></div>
+        <div class="ls-hours__row" data-days="6"><svg aria-hidden="true"><use href="#i-calendar"/></svg><dt>Samedi</dt><dd>9h – 13h · 14h – 18h</dd></div>
+        <div class="ls-hours__row ls-hours__row--closed" data-days="0,1"><svg aria-hidden="true"><use href="#i-calendar"/></svg><dt>Dimanche, lundi</dt><dd>Fermé</dd></div>
+      </dl>
+    </div>
+    <div class="sg-panel" style="display:grid;gap:20px;align-content:start">
+      <div class="ls-divider ls-divider--short"><svg aria-hidden="true"><use href="#i-scissors"/></svg></div>
+      <p style="margin:0;display:flex;gap:12px;align-items:flex-start"><svg width="22" height="22" style="color:var(--color-accent);flex:none;margin-top:3px" aria-hidden="true"><use href="#i-pin"/></svg><span><span class="ls-h3" style="display:block">4 rue de la Poste</span><span class="ls-small">22970 Ploumagoar</span></span></p>
+      <div><span class="ls-tag">Réservation en ligne sur Planity</span></div>
+      <p class="sg-note" style="margin:0">L'état « Ouvert / Fermé » est calculé à l'heure de Paris. Le jour en cours est signalé à côté du libellé.</p>
+    </div>
+  </div>
+
+  <h3 class="sg-sub">Lignes de prix · prestations</h3>
+  <div class="sg-panel">
+    <ul class="ls-price-list">
+      <li class="ls-price-row"><span class="ls-price-row__name">Coupe</span><span class="ls-price-row__price">— €</span><p class="ls-price-row__desc">Shampoing, coupe aux ciseaux ou à la tondeuse, coiffage.</p></li>
+      <li class="ls-price-row"><span class="ls-price-row__name">Taille de barbe</span><span class="ls-price-row__price">— €</span><p class="ls-price-row__desc">Traçage des contours, finition à la lame, huile.</p></li>
+      <li class="ls-price-row"><span class="ls-price-row__name">Technique</span><span class="ls-price-row__price">— €</span><p class="ls-price-row__desc">Couleur, décoloration ou motif, sur devis.</p></li>
+    </ul>
+    <p class="sg-note">Prix des prestations à fournir (affichés sur Planity) : le composant est prêt.</p>
+  </div>
+
+  <h3 class="sg-sub">Cartes produit</h3>
+  <div class="sg-grid sg-4">
+    <a class="ls-product" href="#composants"><div class="ls-product__media"><img src="../assets/img/p-huile.webp" alt="Huile à barbe Skullmen Ocean Oil, flacon compte-gouttes"></div><div class="ls-product__meta"><span class="ls-product__brand">Skullmen</span><span class="ls-product__name">Huile de barbe</span><span class="ls-product__price">12 €</span></div></a>
+    <a class="ls-product" href="#composants"><div class="ls-product__media"><img src="../assets/img/p-parfum.webp" alt="Parfum Elegance Perfume Mist"></div><div class="ls-product__meta"><span class="ls-product__brand">Elegance</span><span class="ls-product__name">Parfum</span><span class="ls-product__price">14 €</span></div><span class="ls-tag">7 senteurs</span></a>
+    <a class="ls-product" href="#composants"><div class="ls-product__media"><img src="../assets/img/p-pomade.webp" alt="Cire brillante Elegance Pomade"></div><div class="ls-product__meta"><span class="ls-product__brand">Elegance</span><span class="ls-product__name">Cire brillante</span><span class="ls-product__price">17 €</span></div></a>
+    <a class="ls-product" href="#composants"><div class="ls-product__media"><img src="../assets/img/p-spray.webp" alt="Spray salé Skullmen Extra Sea Salt"></div><div class="ls-product__meta"><span class="ls-product__brand">Skullmen</span><span class="ls-product__name">Spray salé</span><span class="ls-product__price">15 €</span></div></a>
+  </div>
+
+  <h3 class="sg-sub">Carte prestation</h3>
+  <div class="sg-grid sg-3">
+    <article class="ls-service"><div class="ls-arch ls-service__media"><img src="../assets/img/degrade.webp" alt="Dégradé à la tondeuse, client sous cape LS"></div><span class="ls-service__num">01</span><h3 class="ls-h3">Coupe</h3><p>Dégradé, ciseaux ou les deux. On en parle avant de commencer.</p></article>
+    <article class="ls-service"><div class="ls-arch ls-service__media"><img src="../assets/img/coiffage.webp" alt="Le barbier vérifie la coupe devant le mur en granit"></div><span class="ls-service__num">02</span><h3 class="ls-h3">Taille de barbe</h3><p>Contours nets, finition à la lame et soin.</p></article>
+    <article class="ls-service"><div class="ls-arch ls-service__media"><img src="../assets/img/tondeuses.webp" alt="Tondeuses alignées sur le poste de travail"></div><span class="ls-service__num">03</span><h3 class="ls-h3">Technique</h3><p>Couleur, décoloration, motifs : sur demande.</p></article>
+  </div>
+
+  <h3 class="sg-sub">Champ de formulaire</h3>
+  <div class="sg-grid sg-3">
+    <div class="ls-field"><label for="f1">Votre prénom</label><input class="ls-input" id="f1" autocomplete="given-name"></div>
+    <div class="ls-field"><label for="f2">E-mail</label><input class="ls-input" id="f2" type="email" value="adresse-sans-arobase" aria-invalid="true" aria-describedby="f2e"><p class="ls-field__error" id="f2e">Écrivez une adresse e-mail avec un @.</p></div>
+  </div>
+
+  <h3 class="sg-sub">Navigation &amp; barre mobile</h3>
+  <div class="sg-mock-nav" style="border:1px solid var(--color-line)">
+    <div class="ls-nav" style="position:relative"><div class="ls-container ls-nav__inner">
+      <a class="ls-logo" href="#composants"><svg class="ls-logo__mono" aria-hidden="true"><use href="#ls-mono"/></svg><span class="ls-logo__words"><span class="ls-logo__name">LE STUDIO</span><span class="ls-logo__sub">BARBER SHOP</span></span></a>
+      <ul class="ls-nav__links"><li><a class="ls-link" href="#composants" aria-current="true">Prestations</a></li><li><a class="ls-link" href="#composants">Le salon</a></li><li><a class="ls-link" href="#composants">Boutique</a></li><li><a class="ls-link" href="#composants">Venir</a></li></ul>
+      <a class="ls-btn ls-btn--primary ls-btn--sm" href="#composants">Réserver</a>
+    </div></div>
+  </div>
+  <div class="ls-actionbar sg-mock-bar" style="margin-top:24px;border:1px solid var(--color-line)"><a class="ls-btn ls-btn--primary ls-btn--block" href="#composants">Réserver sur Planity</a></div>
+</div></section>
+
+<!-- ===== 08 Icônes ===== -->
+<section class="sg-section" id="icones"><div class="ls-container">
+  <div class="sg-head"><p class="ls-label">08 — Icônes</p><h2 class="ls-h2">Un trait fin, comme les déliés.</h2>
+    <p class="ls-lead">Grille 24 px, trait 1,4 px, bouts arrondis, en or sur noir. Les icônes de la story (calendrier, horloge, ciseaux) servent de modèle.</p></div>
+  <div class="sg-icons">
+    <figure><svg aria-hidden="true"><use href="#i-scissors"/></svg>ciseaux</figure>
+    <figure><svg aria-hidden="true"><use href="#i-razor"/></svg>lame</figure>
+    <figure><svg aria-hidden="true"><use href="#i-comb"/></svg>peigne</figure>
+    <figure><svg aria-hidden="true"><use href="#i-calendar"/></svg>calendrier</figure>
+    <figure><svg aria-hidden="true"><use href="#i-clock"/></svg>horloge</figure>
+    <figure><svg aria-hidden="true"><use href="#i-pin"/></svg>adresse</figure>
+    <figure><svg aria-hidden="true"><use href="#i-bag"/></svg>boutique</figure>
+    <figure><svg aria-hidden="true"><use href="#i-instagram"/></svg>instagram</figure>
+    <figure><svg aria-hidden="true"><use href="#i-arrow"/></svg>flèche</figure>
+  </div>
+</div></section>
+
+<!-- ===== 09 Photo ===== -->
+<section class="sg-section" id="photo"><div class="ls-container">
+  <div class="sg-head"><p class="ls-label">09 — Direction photo</p><h2 class="ls-h2">Le vrai salon, en lumière basse.</h2>
+    <p class="ls-lead">Uniquement des photos du salon et de l'équipe : noir dominant, granit en contrepoint, l'anneau lumineux dans le cadre quand c'est possible. Pas de banque d'images.</p></div>
+  <div class="sg-photos">
+    <img src="../assets/img/coupe.webp" alt="Coupe en cours, cape LS, anneau lumineux">
+    <img src="../assets/img/tee.webp" alt="Dos du t-shirt Le Studio du barbier">
+    <img src="../assets/img/poste-pierre.webp" alt="Poste de coupe devant le mur en granit">
+    <img src="../assets/img/salon-large.webp" alt="Vue d'ensemble du salon, vitrine et fauteuils">
+    <img src="../assets/img/facade.webp" alt="Façade en granit, enseigne Le Studio Barber Shop">
+    <img src="../assets/img/mur-granit.webp" alt="Mur en granit apparent et porte d'entrée">
+    <img src="../assets/img/etagere.webp" alt="Étagère de produits en chêne">
+    <img src="../assets/img/degrade.webp" alt="Dégradé à la tondeuse">
+  </div>
+  <div class="sg-grid sg-3" style="margin-top:40px">
+    <div><h3 class="ls-h3">À faire</h3><p class="sg-note">Format vertical 3:4 ou arche. Noir profond, blancs qui brillent (néon, logo). Gestes en cours : la tondeuse, le peigne, la main sur la nuque.</p></div>
+    <div><h3 class="ls-h3">À éviter</h3><p class="sg-note">Filtres colorés (le rouge de la fin de vidéo), texte incrusté sur l'image, coins arrondis hors arche, flou de fond artificiel.</p></div>
+    <div><h3 class="ls-h3">À refaire en HD</h3><p class="sg-note">Les images actuelles viennent de stories (483 px de large). Pour le site final : une séance photo et une vidéo en 1080p minimum.</p></div>
+  </div>
+</div></section>
+
+<!-- ===== 10 Mise en situation ===== -->
+<section class="sg-section" id="exemple"><div class="ls-container">
+  <div class="sg-head"><p class="ls-label">10 — Mise en situation</p><h2 class="ls-h2">Un premier écran avec le système.</h2></div>
+  <div class="sg-hero">
+    <div class="ls-neon ls-neon--tilt" aria-hidden="true"></div>
+    <div class="sg-hero__text">
+      <p class="ls-label">Barber shop · Ploumagoar</p>
+      <h3 class="ls-h1">Coupe &amp; barbe, au cœur de Ploumagoar.</h3>
+      <p class="ls-lead">Du mardi au samedi, dans un salon en granit et en noir, 4 rue de la Poste.</p>
+      <div style="display:flex;gap:16px;flex-wrap:wrap"><a class="ls-btn ls-btn--primary" href="#exemple">Réserver sur Planity <svg aria-hidden="true"><use href="#i-arrow"/></svg></a><a class="ls-btn ls-btn--secondary" href="#exemple">Voir les horaires</a></div>
+    </div>
+    <div class="ls-arch ls-arch--outline" style="--ratio:3/4.6"><video src="../assets/video/studio.mp4" poster="../assets/img/poster.webp" muted loop playsinline autoplay aria-label="Le salon en vidéo : coupe, dégradé, vue d'ensemble"></video></div>
+  </div>
+</div></section>
+
+</main>
+
+<footer style="padding:64px 0"><div class="ls-container" style="display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap">
+  <span class="ls-small">Le Studio — Design system v1.0</span>
+  <span class="ls-small">Fichiers : <code>design-system/tokens.css</code> · <code>components.css</code> · <code>DESIGN-SYSTEM.md</code></span>
+</div></footer>
+
+<script>
+  /* Horaires : marque le jour en cours et l'état ouvert/fermé, à l'heure de Paris */
+  (() => {
+    const parts = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Paris', weekday: 'short', hour: '2-digit', minute: '2-digit', hour12: false }).formatToParts(new Date());
+    const get = t => parts.find(p => p.type === t).value;
+    const day = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].indexOf(get('weekday'));
+    const mins = (+get('hour') % 24) * 60 + +get('minute');
+    const slots = { 2: [[540,780],[840,1140]], 3: [[540,780],[840,1140]], 4: [[540,780],[840,1140]], 5: [[540,780],[840,1140]], 6: [[540,780],[840,1080]] };
+    document.querySelectorAll('[data-hours] [data-days]').forEach(r => { if (r.dataset.days.split(',').map(Number).includes(day)) r.classList.add('is-today'); });
+    const open = (slots[day] || []).some(([a, b]) => mins >= a && mins < b);
+    document.querySelectorAll('[data-open-status]').forEach(el => { el.textContent = open ? 'Ouvert en ce moment' : 'Fermé en ce moment'; el.classList.toggle('ls-status--open', open); });
+  })();
+</script>
+</body>
+</html>
