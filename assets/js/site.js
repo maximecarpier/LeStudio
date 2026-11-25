@@ -58,6 +58,24 @@
   const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -10% 0px' });
   $$('[data-reveal], [data-ignite]').forEach(el => io.observe(el));
 
+  /* ---- Boutique : un clic sur un produit de l'étagère (ou de la liste) ouvre sa fiche ---- */
+  const detail = $('[data-product-detail]');
+  if (detail) {
+    const triggers = $$('[data-product]');
+    const show = id => {
+      const tpl = $(`[data-product-card="${id}"]`); if (!tpl) return;
+      detail.replaceChildren(tpl.content.cloneNode(true));
+      detail.classList.remove('is-swap'); void detail.offsetWidth; detail.classList.add('is-swap');
+      triggers.forEach(t => t.setAttribute('aria-pressed', t.dataset.product === id));
+    };
+    triggers.forEach(t => t.addEventListener('click', () => {
+      show(t.dataset.product);
+      // sur téléphone, la fiche est sous l'étagère : on l'amène à l'écran
+      if (t.classList.contains('vitrine__spot') && matchMedia('(max-width: 1023px)').matches) detail.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' });
+    }));
+    triggers.forEach(t => t.dataset.product === 'pomade' && t.setAttribute('aria-pressed', 'true'));
+  }
+
   /* ---- Lien actif dans la navigation ---- */
   const links = $$('.ls-nav__links a');
   const spy = new IntersectionObserver(es => es.forEach(e => {
