@@ -80,7 +80,7 @@ Règles : titres en 400, jamais en gras. Capitales Bodoni à 18 px minimum ; en 
 
 Ivoire sur noir ou noir sur ivoire. Jamais en or, jamais sur l'or, jamais incliné, déformé ou ombré.
 
-> ⚠️ Le monogramme actuel est une reconstitution typographique en Bodoni Moda. Il faut le remplacer par le fichier vectoriel officiel (SVG ou PDF) dans le symbole `#ls-mono`.
+Fichiers SVG vectorisés (tracés, aucune police requise) dans `assets/logo/` : `ls-logo-arc.svg`, `ls-logo-horizontal.svg`, `ls-monogramme.svg`, chacun en version ivoire et `-noir`, plus `favicon.svg`. Redessinés en Bodoni Moda et Manrope à partir du logo du salon.
 
 ## 4. Composants
 
@@ -175,7 +175,6 @@ Grille 24 px, trait 1,4 px, extrémités arrondies, couleur `--color-accent`. Je
 
 | Élément | Pourquoi |
 |---|---|
-| Logo vectoriel officiel (SVG/PDF) | Remplacer la reconstitution typographique |
-| Tarifs des prestations (coupe, barbe, technique) | Les lignes de prix affichent « — € » |
+| Tarifs réels des prestations | Le site affiche des prix provisoires |
 | Photos et vidéo en haute définition | Les stories sont en basse résolution |
 | Téléphone / e-mail (si souhaité) | Absents du brief |
