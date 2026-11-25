@@ -125,6 +125,34 @@
     addEventListener('keydown', e => { if (e.key === 'Escape') blur(); });
   }
 
+  /* ---- Tarifs par catégorie : onglets (flèches au clavier) ; un clic sur un métier ouvre sa catégorie ---- */
+  const tabs = $$('[data-tab]'), ink = $('[data-ink]');
+  if (tabs.length) {
+    const cards = $$('.services [data-cat]');
+    const place = t => { ink.style.setProperty('--x', `${t.offsetLeft}px`); ink.style.setProperty('--w', `${t.offsetWidth}px`); };
+    const select = (t, focus) => {
+      tabs.forEach(o => {
+        const on = o === t;
+        o.setAttribute('aria-selected', on); o.tabIndex = on ? 0 : -1;
+        document.getElementById(o.getAttribute('aria-controls')).hidden = !on;
+      });
+      const cat = t.id.replace('tab-', '');
+      cards.forEach(c => c.classList.toggle('is-active', c.dataset.cat === cat));
+      place(t); if (focus) t.focus();
+    };
+    tabs.forEach((t, i) => {
+      t.addEventListener('click', () => select(t));
+      t.addEventListener('keydown', e => {
+        const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+        if (d) { e.preventDefault(); select(tabs[(i + d + tabs.length) % tabs.length], true); }
+      });
+    });
+    cards.forEach(c => c.addEventListener('click', () => select($(`#tab-${c.dataset.cat}`))));
+    select(tabs[0]);
+    addEventListener('resize', () => place($('[data-tab][aria-selected="true"]')));
+    document.fonts && document.fonts.ready.then(() => place($('[data-tab][aria-selected="true"]')));
+  }
+
   /* ---- Lien actif dans la navigation ---- */
   const links = $$('.ls-nav__links a');
   const spy = new IntersectionObserver(es => es.forEach(e => {

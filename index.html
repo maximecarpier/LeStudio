@@ -134,19 +134,19 @@ if(!matchMedia('(prefers-reduced-motion: reduce)').matches){var h=document.docum
 
     <div class="prestations__grid">
       <ol class="services">
-        <li class="ls-service" data-reveal>
+        <li class="ls-service" data-reveal data-cat="coupes">
           <div class="ls-arch ls-service__media"><img src="assets/img/degrade.webp" alt="Dégradé à la tondeuse, client sous la cape LS" loading="lazy" width="483" height="790"></div>
           <span class="ls-service__num">01</span>
           <h3 class="ls-h3">Coupe</h3>
           <p>Dégradé, ciseaux ou les deux. Shampoing et coiffage compris.</p>
         </li>
-        <li class="ls-service" data-reveal>
+        <li class="ls-service" data-reveal data-cat="barbe">
           <div class="ls-arch ls-service__media"><img src="assets/img/coiffage.webp" alt="Le barbier vérifie la coupe devant le mur en granit" loading="lazy" width="483" height="790"></div>
           <span class="ls-service__num">02</span>
           <h3 class="ls-h3">Taille de barbe</h3>
           <p>Contours tracés, finition à la lame, serviette chaude et huile.</p>
         </li>
-        <li class="ls-service" data-reveal>
+        <li class="ls-service" data-reveal data-cat="couleur">
           <div class="ls-arch ls-service__media"><img src="assets/img/coupe.webp" alt="Coupe en cours sous un anneau lumineux" loading="lazy" width="483" height="790"></div>
           <span class="ls-service__num">03</span>
           <h3 class="ls-h3">Technique</h3>
@@ -155,18 +155,28 @@ if(!matchMedia('(prefers-reduced-motion: reduce)').matches){var h=document.docum
       </ol>
 
       <div class="tarifs" data-reveal>
-        <ul class="ls-price-list">
+        <div class="tarifs__tabs" role="tablist" aria-label="Catégories de prestations">
+          <button class="tarifs__tab" type="button" role="tab" id="tab-coupes" aria-controls="cat-coupes" aria-selected="true" data-tab>Coupes</button>
+          <button class="tarifs__tab" type="button" role="tab" id="tab-barbe" aria-controls="cat-barbe" aria-selected="false" tabindex="-1" data-tab>Barbe</button>
+          <button class="tarifs__tab" type="button" role="tab" id="tab-couleur" aria-controls="cat-couleur" aria-selected="false" tabindex="-1" data-tab>Couleur &amp; technique</button>
+          <span class="tarifs__ink" aria-hidden="true" data-ink></span>
+        </div>
+        <ul class="ls-price-list tarifs__panel" role="tabpanel" id="cat-coupes" aria-labelledby="tab-coupes">
           <li class="ls-price-row"><span class="ls-price-row__name">Coupe + coiffage</span><span class="ls-price-row__price">22 €</span><p class="ls-price-row__desc">30 min · shampoing sur demande.</p></li>
-          <li class="ls-price-row"><span class="ls-price-row__name">Coupe transformation</span><span class="ls-price-row__price">25 €</span><p class="ls-price-row__desc">45 min · changement de coupe avec plus de 5 cm coupés.</p></li>
-          <li class="ls-price-row"><span class="ls-price-row__name">Forfait père-fils</span><span class="ls-price-row__price">34 €</span><p class="ls-price-row__desc">1 h.</p></li>
-          <li class="ls-price-row"><span class="ls-price-row__name">Coupe junior</span><span class="ls-price-row__price">15 €</span><p class="ls-price-row__desc">30 min · moins de 12 ans.</p></li>
+          <li class="ls-price-row"><span class="ls-price-row__name">Coupe transformation</span><span class="ls-price-row__price">25 €</span><p class="ls-price-row__desc">45 min · plus de 5 cm coupés.</p></li>
           <li class="ls-price-row"><span class="ls-price-row__name">Coupe étudiant</span><span class="ls-price-row__price">18 €</span><p class="ls-price-row__desc">30 min · moins de 20 ans.</p></li>
-          <li class="ls-price-row"><span class="ls-price-row__name">Coupe + barbe</span><span class="ls-price-row__price">26 €</span><p class="ls-price-row__desc">45 min.</p></li>
+          <li class="ls-price-row"><span class="ls-price-row__name">Coupe junior</span><span class="ls-price-row__price">15 €</span><p class="ls-price-row__desc">30 min · moins de 12 ans.</p></li>
+          <li class="ls-price-row"><span class="ls-price-row__name">Forfait père-fils</span><span class="ls-price-row__price">34 €</span><p class="ls-price-row__desc">1 h · deux coupes.</p></li>
+        </ul>
+        <ul class="ls-price-list tarifs__panel" role="tabpanel" id="cat-barbe" aria-labelledby="tab-barbe" hidden>
           <li class="ls-price-row"><span class="ls-price-row__name">Taille de barbe</span><span class="ls-price-row__price">10 €</span><p class="ls-price-row__desc">15 min.</p></li>
           <li class="ls-price-row"><span class="ls-price-row__name">Taille de barbe premium</span><span class="ls-price-row__price">15 €</span><p class="ls-price-row__desc">25 min · serviette chaude et huile.</p></li>
+          <li class="ls-price-row"><span class="ls-price-row__name">Coupe + barbe</span><span class="ls-price-row__price">26 €</span><p class="ls-price-row__desc">45 min.</p></li>
+        </ul>
+        <ul class="ls-price-list tarifs__panel" role="tabpanel" id="cat-couleur" aria-labelledby="tab-couleur" hidden>
           <li class="ls-price-row"><span class="ls-price-row__name">Permanente + coupe</span><span class="ls-price-row__price">60 €</span><p class="ls-price-row__desc">1 h 30.</p></li>
-          <li class="ls-price-row"><span class="ls-price-row__name">Décoloration</span><span class="ls-price-row__price">Sur devis</span><p class="ls-price-row__desc">1 h 30.</p></li>
-          <li class="ls-price-row"><span class="ls-price-row__name">Mèches</span><span class="ls-price-row__price">Sur devis</span><p class="ls-price-row__desc">1 h 30.</p></li>
+          <li class="ls-price-row"><span class="ls-price-row__name">Décoloration</span><span class="ls-price-row__price">Sur devis</span><p class="ls-price-row__desc">1 h 30 · on en parle avant.</p></li>
+          <li class="ls-price-row"><span class="ls-price-row__name">Mèches</span><span class="ls-price-row__price">Sur devis</span><p class="ls-price-row__desc">1 h 30 · on en parle avant.</p></li>
         </ul>
         <a class="ls-btn ls-btn--secondary tarifs__cta" href="https://www.planity.com/le-studio-barber-shop-22970-ploumagoar">Voir les créneaux libres <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
         <figure class="tarifs__tools"><img src="assets/img/outils-granit.webp" alt="Tondeuse, ciseaux, peigne et rasoir posés sur une dalle de granit" width="720" height="964" loading="lazy"></figure>
